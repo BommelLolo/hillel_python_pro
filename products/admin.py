@@ -8,9 +8,10 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'price', "is_active")
     filter_horizontal = ('categories', 'products')  # for parameters ManyToMany
 
-# admin.register(Product, ProductAdmin)  # second variant instead decorator/ always in the end
+# second variant instead decorator/ always in the end
+# admin.register(Product, ProductAdmin)
 
 
 @admin.register(Category)
-class ProductAdmin(admin.ModelAdmin):
-    ...
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description', "is_active")
