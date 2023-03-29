@@ -1,7 +1,7 @@
 from os import path
 
 from django.db import models
-
+from django.core.validators import MinValueValidator
 from project.constants import DECIMAL_PLACES, MAX_DIGITS
 from project.mixins.models import PKMixin
 
@@ -24,6 +24,9 @@ class Category(PKMixin):
     )
     is_active = models.BooleanField(default=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Product(PKMixin):
     name = models.CharField(max_length=255)
@@ -42,9 +45,14 @@ class Product(PKMixin):
     products = models.ManyToManyField('products.Product', blank=True)
     # created_by
     price = models.DecimalField(
+        # default=0,  # better to write on the migration stage
+        validators=[MinValueValidator(0)],
         max_digits=MAX_DIGITS,
         decimal_places=DECIMAL_PLACES
     )
+
+    def __str__(self):
+        return f"{self.name} --- Price {self.price}"
 
 
 class Discount(PKMixin):
