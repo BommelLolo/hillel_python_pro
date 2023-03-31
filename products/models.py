@@ -53,14 +53,3 @@ class Product(PKMixin):
 
     def __str__(self):
         return f"{self.name} --- Price {self.price}"
-
-
-class Discount(PKMixin):
-    code = models.CharField(max_length=255)
-    is_active = models.BooleanField(default=True)
-    amount = models.PositiveIntegerField(default=0)
-
-    type = models.CharField(
-        max_length=16,
-        choices=[(0, 'Money'), (1, 'Percents')]
-    )
