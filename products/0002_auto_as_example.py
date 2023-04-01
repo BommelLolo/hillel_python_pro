@@ -9,6 +9,7 @@ fake = Faker()
 def start(apps, schema_editor):
     Product = apps.get_model('products', 'Product')
     Category = apps.get_model('products', 'Category')
+
     for _ in range(100):
         product = Product.objects.create(
             name=fake.word(),
