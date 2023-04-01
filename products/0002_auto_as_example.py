@@ -9,8 +9,6 @@ fake = Faker()
 def start(apps, schema_editor):
     Product = apps.get_model('products', 'Product')
     Category = apps.get_model('products', 'Category')
-    # OrderItem = apps.get_model('products', 'OrderItem')
-    # Discount = apps.get_model('products', 'Discount')
 
     for _ in range(100):
         product = Product.objects.create(
@@ -25,18 +23,6 @@ def start(apps, schema_editor):
                 description=fake.sentence(),
             )
         )
-    #     OrderItem.objects.create(
-    #         quantity=fake.random_number(),
-    #         product=product
-    #     )
-    #
-    # Discount.objects.create(
-    #     code=fake.word(),
-    #     is_active=True,
-    #     amount=fake.random_number(),
-    #     type=0
-    # )
-
 
     # for better efficiency will be better to use 1 query to DB like next:
     # products = []
@@ -57,10 +43,6 @@ def end(apps, schema_editor):
     Product.objects.all().delete()
     Category = apps.get_model('products', 'Category')
     Category.objects.all().delete()
-    # OrderItem = apps.get_model('products', 'OrderItem')
-    # OrderItem.objects.all().delete()
-    # Discount = apps.get_model('products', 'Discount')
-    # Discount.objects.all().delete()
 
 
 class Migration(migrations.Migration):
