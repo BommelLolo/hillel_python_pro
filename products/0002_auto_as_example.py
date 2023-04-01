@@ -24,7 +24,7 @@ def start(apps, schema_editor):
             )
         )
 
-    # for better efficiency will be better to use 1 query to DB like next:
+    # # for better efficiency will be better to use 1 query to DB like next:
     # products = []
     # for _ in range(1000):
     #     products.append(
@@ -32,7 +32,9 @@ def start(apps, schema_editor):
     #             name=fake.word(),
     #             description=fake.sentence(),
     #             sku=fake.random_number(),
-    #             price=fake.pydecimal(left_digits=4, right_digits=2, positive=True)
+    #             price=fake.pydecimal(left_digits=4,
+    #                                  right_digits=2,
+    #                                  positive=True)
     #         )
     #     )
     # Product.objects.bulk_create(products)

@@ -1,5 +1,3 @@
-import decimal
-
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.core.validators import MinValueValidator
@@ -64,12 +62,12 @@ class Order(PKMixin):
                f"Amount: {self.total_amount}. User: {User}"
 
     # only one active order for user
-    class Meta:
-        constraints: [
-            models.UniqueConstraint(fields=['user'],
-                                    condition=models.Q(is_active=True),
-                                    name='unique_is_active')
-        ]
+    # class Meta:
+    #     constraints: [
+    #         models.UniqueConstraint(fields=['User'],
+    #                                 condition=models.Q(is_active=True),
+    #                                 name='unique_is_active')
+    #     ]
 
     def get_total_amount(self):
         total_amount = self.order_items.aggregate(
