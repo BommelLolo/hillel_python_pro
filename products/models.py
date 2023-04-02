@@ -8,7 +8,7 @@ from project.mixins.models import PKMixin
 
 def upload_to(instance, filename):
     _name, extension = path.splitext(filename)
-    return f'product/images/{str(instance.pk)}{extension}'
+    return f'products/images/{str(instance.pk)}{extension}'
 
 
 class Category(PKMixin):
