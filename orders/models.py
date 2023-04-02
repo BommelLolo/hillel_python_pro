@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.core.validators import MinValueValidator
 from django.db.models import Sum, F
+from django.utils import timezone
 
 from project.constants import DECIMAL_PLACES, MAX_DIGITS
 from project.mixins.models import PKMixin
@@ -27,10 +28,21 @@ class Discount(PKMixin):
         choices=DiscountTypes.choices,
         default=DiscountTypes.VALUE
     )
+    valid_until = models.DateTimeField(
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return f"№{self.code} Discount: {self.amount} " \
                f"{DiscountTypes(self.discount_type).label}"
+
+    @property
+    def is_valid(self):
+        is_valid = self.is_active
+        if self.valid_until:
+            is_valid &= (timezone.now() <= self.valid_until)
+        return is_valid
 
 
 class Order(PKMixin):
@@ -62,12 +74,12 @@ class Order(PKMixin):
                f"Amount: {self.total_amount}. User: {User}"
 
     # only one active order for user
-    # class Meta:
-    #     constraints: [
-    #         models.UniqueConstraint(fields=['User'],
-    #                                 condition=models.Q(is_active=True),
-    #                                 name='unique_is_active')
-    #     ]
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user'],
+                                    condition=models.Q(is_active=True),
+                                    name='unique_is_active')
+        ]
 
     def get_total_amount(self):
         total_amount = self.order_items.aggregate(
