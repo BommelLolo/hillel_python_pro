@@ -16,5 +16,6 @@ class FeedbackModelForm(forms.ModelForm):
         try:
             Feedback.objects.get(name=self.cleaned_data['user'])
         except Feedback.DoesNotExist:
-            raise ValidationError('User is not sign in! Sign in to write a feedback')
+            raise ValidationError('User is not sign in! '
+                                  'Sign in to send a feedback')
         return self.cleaned_data['user']
