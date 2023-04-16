@@ -1,32 +1,20 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 from feedbacks.forms import FeedbackModelForm
 from feedbacks.models import Feedback
 
 
+@login_required
 def feedbacks(request, *args, **kwargs):
-    form = FeedbackModelForm
+    user = request.user
+    form = FeedbackModelForm(user=user)
     if request.method == 'POST':
-        form = form(data=request.POST, files=request.FILES)
+        form = FeedbackModelForm(user=user, data=request.POST)
         if form.is_valid():
             form.save()
-    else:
-        form = form()
     context = {
         'feedback': Feedback.objects.iterator(),
         'form': form
     }
     return render(request, 'feedbacks/index.html', context)
-
-# def feedbacks(request, *args, **kwargs):
-#     user = request.user
-#     form = FeedbackModelForm(user=user)
-#     if request.method == 'POST':
-#         form = FeedbackModelForm(user=user, data=request.POST)
-#         if form.is_valid():
-#             form.save()
-#     context = {
-#         'feedback': Feedback.objects.iterator(),
-#         'form': form
-#     }
-#     return render(request, 'feedbacks/index.html', context)
