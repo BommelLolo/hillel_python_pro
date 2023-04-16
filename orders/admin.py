@@ -10,7 +10,7 @@ class DiscountAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('number', 'total_amount', 'user', 'is_paid', 'is_active')
+    list_display = ('order_number', 'total_amount', 'user', 'is_paid', 'is_active')
 
 
 @admin.register(OrderItem)

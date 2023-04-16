@@ -46,7 +46,7 @@ class Discount(PKMixin):
 
 
 class Order(PKMixin):
-    number = models.CharField(max_length=255)
+    order_number = models.PositiveSmallIntegerField(default=1)
     user = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -70,7 +70,7 @@ class Order(PKMixin):
     )
 
     def __str__(self):
-        return f"Order №{self.number} " \
+        return f"Order №{self.order_number} " \
                f"Amount: {self.total_amount}. User: {User}"
 
     # only one active order for user
@@ -84,9 +84,9 @@ class Order(PKMixin):
     def get_total_amount(self):
         total_amount = self.order_items.aggregate(
             total_amount=Sum(F('price') * F('quantity'))
-        )['total_amount']
+        )['total_amount'] or 0
 
-        if self.discount.is_active:
+        if self.discount.is_active and self.discount.is_valid:
             if self.discount.discount_type == DiscountTypes.VALUE:
                 total_amount -= self.discount.amount
             else:

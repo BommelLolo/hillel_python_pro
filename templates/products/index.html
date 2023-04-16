@@ -10,7 +10,7 @@
 {% for product in products %}
     <p>
         {% if product.image %}<img src="{{ product.image.url }}"
-                                   style="width: 80px;">{% endif %}
+                                   style="width: 80px;" alt="img">{% endif %}
         {{ product.name }}  - {{ product.price }}
     </p>
 {% endfor %}
@@ -34,19 +34,18 @@
 {#        for 2-nd variant of forms#}
 {#        {{ form.as_p }}#}
 
-        {% for field in form %}
+{#        {% for field in form %}#}
 {#            {{ field }}#}
-            <label for="{{ field.label }}">{{ field.name }}</label>
-            <input type="{{ field.widget_type }}" value="{{ field.initial }}" name="{{ field.name }}">
+{#            <label for="{{ field.label }}">{{ field.name }}</label>#}
+{#            <input type="{{ field.widget_type }}" value="{{ field.initial }}" name="{{ field.name }}"/>#}
+{#        {% endfor %}#}
 
-        {% endfor %}
+        {{ form.as_p }}
         <input type="submit" value="Save">
     </form>
     {% for name, error in form.errors.items %}
         <p>{{ name }}{{ error }}</p>
     {% endfor %}
-
 </div>
-
 </body>
 </html>
