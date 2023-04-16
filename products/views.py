@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from products.forms import ProductModelForm
+from products.model_forms import ProductModelForm
 from products.models import Product
 
 

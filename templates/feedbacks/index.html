@@ -7,11 +7,13 @@
 <body>
 <h1>Feedbacks</h1>
 
-<h1> user {{ user.is_authenticated }}</h1>
+<h1> in system? {{ user.is_authenticated }}</h1>
 
 {% for feedback in feedbacks %}
-    <p>{{ feedback.user }} - {{ feedback.product }}
-        - {{ feedback.rating }} - {{ feedback.text }} </p>
+    <p> {{ feedback.user }} </p>
+    <p> {{ feedback.product }} - {{ feedback.rating }} </p>
+    <p> {{ feedback.text }} </p>
+    <p> _________________________ </p>
 {% endfor %}
 
     <form method="post" enctype="multipart/form-data">

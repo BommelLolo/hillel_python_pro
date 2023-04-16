@@ -1,7 +1,7 @@
 from django.urls import path
-
-from feedbacks.views import feedbacks
+from django.contrib.auth.decorators import login_required
+from feedbacks.views import FeedbackView
 
 urlpatterns = [
-    path('', feedbacks)
+    path('', login_required(FeedbackView.as_view()), name='feedbacks')
 ]
