@@ -7,21 +7,18 @@
 <body>
 <h1>Feedbacks</h1>
 
+<h1> user {{ user.is_authenticated }}</h1>
+
 {% for feedback in feedbacks %}
-    <p>
-        {{ feedback.user }} - {{ feedback.product }} - {{ feedback.rating }} - {{ feedback.text }}
-    </p>
+    <p>{{ feedback.user }} - {{ feedback.product }}
+        - {{ feedback.rating }} - {{ feedback.text }} </p>
 {% endfor %}
 
-<div>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Save">
     </form>
-    {% for name, error in form.errors.items %}
-        <p>{{ name }}{{ error }}</p>
-    {% endfor %}
-</div>
+
 </body>
 </html>
