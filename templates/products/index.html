@@ -5,6 +5,47 @@
     <title>Title</title>
 </head>
 <body>
-    <h1>Hello World!</h1>
+<h1>Products</h1>
+
+{% for product in products %}
+    <p>
+        {% if product.image %}<img src="{{ product.image.url }}"
+                                   style="width: 80px;" alt="img">{% endif %}
+        {{ product.name }}  - {{ product.price }}
+    </p>
+{% endfor %}
+
+<div>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+{#        for 1-st variant of forms#}
+{#        <label for="id_name">Name</label>#}
+{#        <input id="id_name" type="text" name="name">#}
+{#        <label for="id_description">Description</label>#}
+{#        <input id="id_description" type="text" name="description">#}
+{#        <label for="id_price">Price</label>#}
+{#        <input id="id_price" type="number" name="price">#}
+{#        <label for="id_sku">Sku</label>#}
+{#        <input id="id_sku" type="text" name="sku">#}
+{#        <label for="id_image">Image</label>#}
+{#        <input id="id_image" type="file" name="image">#}
+{#        <input type="submit" value="Save">#}
+
+{#        for 2-nd variant of forms#}
+{#        {{ form.as_p }}#}
+
+{#        {% for field in form %}#}
+{#            {{ field }}#}
+{#            <label for="{{ field.label }}">{{ field.name }}</label>#}
+{#            <input type="{{ field.widget_type }}" value="{{ field.initial }}" name="{{ field.name }}"/>#}
+{#        {% endfor %}#}
+
+        {{ form.as_p }}
+        <input type="submit" value="Save">
+    </form>
+    {% for name, error in form.errors.items %}
+        <p>{{ name }}{{ error }}</p>
+    {% endfor %}
+</div>
 </body>
 </html>

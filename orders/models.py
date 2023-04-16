@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.core.validators import MinValueValidator
 from django.db.models import Sum, F
+from django.utils import timezone
 
 from project.constants import DECIMAL_PLACES, MAX_DIGITS
 from project.mixins.models import PKMixin
@@ -27,14 +28,25 @@ class Discount(PKMixin):
         choices=DiscountTypes.choices,
         default=DiscountTypes.VALUE
     )
+    valid_until = models.DateTimeField(
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return f"№{self.code} Discount: {self.amount} " \
                f"{DiscountTypes(self.discount_type).label}"
 
+    @property
+    def is_valid(self):
+        is_valid = self.is_active
+        if self.valid_until:
+            is_valid &= (timezone.now() <= self.valid_until)
+        return is_valid
+
 
 class Order(PKMixin):
-    number = models.CharField(max_length=255)
+    order_number = models.PositiveSmallIntegerField(default=1)
     user = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -58,23 +70,23 @@ class Order(PKMixin):
     )
 
     def __str__(self):
-        return f"Order №{self.number} " \
+        return f"Order №{self.order_number} " \
                f"Amount: {self.total_amount}. User: {User}"
 
     # only one active order for user
-    # class Meta:
-    #     constraints: [
-    #         models.UniqueConstraint(fields=['User'],
-    #                                 condition=models.Q(is_active=True),
-    #                                 name='unique_is_active')
-    #     ]
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user'],
+                                    condition=models.Q(is_active=True),
+                                    name='unique_is_active')
+        ]
 
     def get_total_amount(self):
         total_amount = self.order_items.aggregate(
             total_amount=Sum(F('price') * F('quantity'))
-        )['total_amount']
+        )['total_amount'] or 0
 
-        if self.discount.is_active:
+        if self.discount.is_active and self.discount.is_valid:
             if self.discount.discount_type == DiscountTypes.VALUE:
                 total_amount -= self.discount.amount
             else:
