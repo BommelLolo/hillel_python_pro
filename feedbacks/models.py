@@ -5,8 +5,8 @@ from project.model_choices import FeedbackRatings
 
 
 class Feedback(PKMixin):
-    text = models.SlugField(
-        max_length=1023,
+    text = models.TextField(
+        max_length=1024,
         null=True,
         blank=True
     )

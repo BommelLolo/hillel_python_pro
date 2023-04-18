@@ -1,20 +1,25 @@
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.views.generic import FormView
+from django.urls import reverse_lazy
 
-from feedbacks.forms import FeedbackModelForm
+from feedbacks.model_forms import FeedbackModelForm
 from feedbacks.models import Feedback
 
 
-@login_required
-def feedbacks(request, *args, **kwargs):
-    user = request.user
-    form = FeedbackModelForm(user=user)
-    if request.method == 'POST':
-        form = FeedbackModelForm(user=user, data=request.POST)
-        if form.is_valid():
-            form.save()
-    context = {
-        'feedback': Feedback.objects.iterator(),
-        'form': form
-    }
-    return render(request, 'feedbacks/index.html', context)
+class FeedbackView(FormView):
+    form_class = FeedbackModelForm
+    template_name = 'feedbacks/index.html'
+    success_url = reverse_lazy('feedbacks')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        kwargs['feedbacks'] = Feedback.objects.iterator()
+        context = super().get_context_data(**kwargs)
+        return context
+
+    # @method_decorator(login_required)
+    # def dispatch(self, request, *args, **kwargs):
+    #     return super().dispatch(request, *args, **kwargs)

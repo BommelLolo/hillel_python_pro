@@ -5,20 +5,19 @@
     <title>Title</title>
 </head>
 <body>
-<h1>Feedbacks</h1>
-
-<h1> user {{ user.is_authenticated }}</h1>
+<h1> {{ user.is_authenticated }} </h1>
 
 {% for feedback in feedbacks %}
-    <p>{{ feedback.user }} - {{ feedback.product }}
-        - {{ feedback.rating }} - {{ feedback.text }} </p>
+    <p> {{ feedback.product }} - {{ feedback.user }} </p>
+    <p> {{ feedback.text }} - {{ feedback.rating }} </p>
+    <p> _________________________ </p>
 {% endfor %}
 
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
+<form method="post" enctype="multipart/form-data" action="{% url 'feedbacks' %}">
+    {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Save">
-    </form>
+    <input type="submit" value="Save">
+</form>
 
 </body>
 </html>
