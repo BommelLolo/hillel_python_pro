@@ -6,7 +6,7 @@ from feedbacks.models import Feedback
 class FeedbackModelForm(forms.ModelForm):
     class Meta:
         model = Feedback
-        fields = ('user', 'rating', 'text')
+        fields = ('product', 'user', 'rating', 'text')
 
     def __init__(self, user=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
