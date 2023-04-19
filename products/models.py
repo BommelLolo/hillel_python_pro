@@ -31,8 +31,8 @@ class Category(PKMixin):
 class Product(PKMixin):
     name = models.CharField(max_length=255)
     description = models.TextField(
-        blank=True,  # empty to Django
-        null=True  # empty to db
+        blank=True,
+        null=True
     )
     image = models.ImageField(
         upload_to=upload_to,
@@ -45,7 +45,6 @@ class Product(PKMixin):
     products = models.ManyToManyField('products.Product', blank=True)
     # created_by
     price = models.DecimalField(
-        # default=0,  # better to write on the migration stage
         validators=[MinValueValidator(0)],
         max_digits=MAX_DIGITS,
         decimal_places=DECIMAL_PLACES
