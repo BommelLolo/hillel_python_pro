@@ -5,6 +5,22 @@
     <title>Title</title>
 </head>
 <body>
-    <h1>Your orders could have been here</h1>
+    <h1>Your orders also could have been here</h1>
+
+{% for order in orders %}
+    <p>
+        {{ order.order_number }} Amount {{ order.total_amount }} $ . User {{ order.User }}
+    </p>
+{% endfor %}
+
+<div>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p> __________________________________________________________ </p>
+        {{ form.as_p }}
+        <input type="submit" value="Save">
+    </form>
+
+</div>
 </body>
 </html>

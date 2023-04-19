@@ -53,7 +53,6 @@ class Order(PKMixin):
         null=True,
         blank=True
     )
-
     discount = models.ForeignKey(
         Discount,
         on_delete=models.SET_NULL,
