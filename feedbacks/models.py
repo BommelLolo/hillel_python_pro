@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.core.validators import MaxValueValidator
 from project.mixins.models import PKMixin
-from project.model_choices import FeedbackRatings
 
 
 class Feedback(PKMixin):
@@ -12,8 +12,7 @@ class Feedback(PKMixin):
     )
     # Need to validate 1,2,3,4,5
     rating = models.PositiveSmallIntegerField(
-        choices=FeedbackRatings.choices,
-        default=FeedbackRatings.DEFAULT,
+        validators=(MaxValueValidator(5),)
     )
     user = models.ForeignKey(
         get_user_model(),
