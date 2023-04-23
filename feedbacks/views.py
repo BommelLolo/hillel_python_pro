@@ -10,7 +10,6 @@ from feedbacks.models import Feedback
 class FeedbackView(FormView):
     form_class = FeedbackModelForm
     template_name = 'feedbacks/create.html'
-
     success_url = reverse_lazy('feedbacks')
 
     @method_decorator(login_required)

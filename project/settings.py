@@ -115,8 +115,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LOGOUT_REDIRECT_URL = reverse_lazy("login")
-LOGIN_REDIRECT_URL = 'feedbacks'
+LOGIN_REDIRECT_URL = reverse_lazy("main")
+LOGOUT_REDIRECT_URL = LOGIN_REDIRECT_URL
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
@@ -135,7 +135,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
+STATIC_ROOT = 'static_files'
+STATICFILES_DIRS = ['assets']
+MEDIA_URL = 'media/'
+MEDIA_ROOT = 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
