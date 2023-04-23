@@ -11,5 +11,5 @@ urlpatterns = [
 
     # with this auth we don't need our urls and views
     path('', include('django.contrib.auth.urls')),
-    path('signup/', RegistrationView.as_view())
+    path('signup/', RegistrationView.as_view(), name='signup')
 ]

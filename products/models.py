@@ -41,7 +41,7 @@ class Product(PKMixin):
     )
     sku = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
-    categories = models.ManyToManyField(Category, blank=True)
+    categories = models.ManyToManyField(Category)
     products = models.ManyToManyField('products.Product', blank=True)
     # created_by
     price = models.DecimalField(
