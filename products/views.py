@@ -5,7 +5,6 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
-from django.views import View
 from django.views.generic import FormView, TemplateView
 from django.urls import reverse_lazy
 from django.shortcuts import render
