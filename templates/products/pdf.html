@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+</head>
+<body>
+<div>
+{#    <img id="logo" class="logo" src="{% static 'images/logo.png' %}" alt="logo">#}
+    <img style="width: 300px;"
+         src="https://volleymag.com.ua/skin/volleymagnew_skin/frontend/img/logos/logo_header.png"
+    alt="logo_web">
+</div>
+<h1>Products {% now "jS F Y H:i" %}</h1>
+{% for product in products %}
+    <p>{{ product.name }} --- {{ product.price }}</p>
+{% endfor %}
+</body>
+</html>

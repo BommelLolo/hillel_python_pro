@@ -20,11 +20,11 @@ class Feedback(PKMixin):
         null=True,
         blank=True
     )
-    product = models.ForeignKey(
-        'products.Product',
-        on_delete=models.PROTECT,
-        related_name='feedbacks'
-    )
+    # product = models.ForeignKey(
+    #     'products.Product',
+    #     on_delete=models.PROTECT,
+    #     related_name='feedbacks'
+    # )
 
     def __str__(self):
         return f"{self.user}. Rating {self.rating}. Text {self.text}"
