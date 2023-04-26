@@ -18,13 +18,13 @@ class ProductView(FormView):
     template_name = 'products/index.html'
     success_url = reverse_lazy('products')
 
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         form = self.form_class(data=request.POST)
         if form.is_valid():
             form.save()
         return render(request, 'products/index.html', context={
             'products': Product.objects.iterator(),
-            'form': form
+            # 'form': form
         })
 
     def get_context_data(self, **kwargs):

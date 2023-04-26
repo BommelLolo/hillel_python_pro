@@ -28,5 +28,5 @@ class OrderView(FormView):
             form.save()
         return render(request, 'orders/index.html', context={
             'order': Order.objects.iterator(),
-            'form': form
+            # 'form': form
         })
