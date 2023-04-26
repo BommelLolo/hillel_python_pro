@@ -20,7 +20,7 @@ class Discount(PKMixin):
         max_length=32,
         unique=True
     )
-    amount = models.DecimalField(
+    total_amount = models.DecimalField(
         max_digits=MAX_DIGITS,
         decimal_places=DECIMAL_PLACES
     )
@@ -34,7 +34,7 @@ class Discount(PKMixin):
     )
 
     def __str__(self):
-        return f"№{self.code} Discount: {self.amount} " \
+        return f"№{self.code} Discount: {self.total_amount} " \
                f"{DiscountTypes(self.discount_type).label}"
 
     @property
@@ -55,9 +55,9 @@ class Order(PKMixin):
     )
     discount = models.ForeignKey(
         Discount,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True
+        on_delete=models.PROTECT
+        # null=True,
+        # blank=True
     )
     is_paid = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -80,6 +80,10 @@ class Order(PKMixin):
                                     name='unique_is_active')
         ]
 
+    @property
+    def is_current_order(self):
+        return self.is_active and not self.is_paid
+
     def get_total_amount(self):
         total_amount = self.order_items.aggregate(
             total_amount=Sum(F('price') * F('quantity'))
@@ -87,9 +91,10 @@ class Order(PKMixin):
 
         if self.discount.is_active and self.discount.is_valid:
             if self.discount.discount_type == DiscountTypes.VALUE:
-                total_amount -= self.discount.amount
+                total_amount -= self.discount.total_amount
             else:
-                total_amount = total_amount * (1 - self.discount.amount / 100)
+                total_amount = total_amount * \
+                               (1 - self.discount.total_amount / 100)
         return total_amount
 
 
