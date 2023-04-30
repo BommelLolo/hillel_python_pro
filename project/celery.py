@@ -1,5 +1,4 @@
 import os
-from time import sleep
 
 from celery import Celery
 
@@ -22,7 +21,7 @@ app.autodiscover_tasks()
 def debug_task(self, x, y):
     try:
         # x['key']
-        z = x + y
+        x + y
     except TypeError as err:
         raise self.retry(exc=err)
     print(f'Request: {self.request!r}')
