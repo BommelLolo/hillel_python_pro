@@ -1,8 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.core.validators import MinValueValidator
 from django.db.models import Sum, F
 from django.utils import timezone
+from django_lifecycle import LifecycleModelMixin, AFTER_SAVE, hook, \
+    AFTER_UPDATE
 
 from project.constants import DECIMAL_PLACES, MAX_DIGITS
 from project.mixins.models import PKMixin
@@ -20,7 +21,7 @@ class Discount(PKMixin):
         max_length=32,
         unique=True
     )
-    total_amount = models.DecimalField(
+    amount = models.DecimalField(
         max_digits=MAX_DIGITS,
         decimal_places=DECIMAL_PLACES
     )
@@ -34,7 +35,7 @@ class Discount(PKMixin):
     )
 
     def __str__(self):
-        return f"№{self.code} Discount: {self.total_amount} " \
+        return f"№{self.code} Discount: {self.amount} " \
                f"{DiscountTypes(self.discount_type).label}"
 
     @property
@@ -45,8 +46,8 @@ class Discount(PKMixin):
         return is_valid
 
 
-class Order(PKMixin):
-    order_number = models.PositiveSmallIntegerField(default=1)
+class Order(LifecycleModelMixin, PKMixin):
+    order_number = models.SmallIntegerField(default=1)
     user = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -55,14 +56,13 @@ class Order(PKMixin):
     )
     discount = models.ForeignKey(
         Discount,
-        on_delete=models.PROTECT
-        # null=True,
-        # blank=True
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
     )
     is_paid = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     total_amount = models.DecimalField(
-        validators=[MinValueValidator(0)],
         max_digits=MAX_DIGITS,
         decimal_places=DECIMAL_PLACES,
         default=0
@@ -89,16 +89,29 @@ class Order(PKMixin):
             total_amount=Sum(F('price') * F('quantity'))
         )['total_amount'] or 0
 
-        if self.discount.is_active and self.discount.is_valid:
+        if self.discount and self.discount.is_valid:
             if self.discount.discount_type == DiscountTypes.VALUE:
-                total_amount -= self.discount.total_amount
+                total_amount -= self.discount.amount
             else:
                 total_amount = total_amount * \
-                               (1 - self.discount.total_amount / 100)
+                               (1 - self.discount.amount / 100)
+
+        # if self.discount and self.discount.is_valid:
+        #     total_amount = (
+        #         total_amount - self.discount.amount
+        #         if self.discount.discount_type == DiscountTypes.VALUE else
+        #         total_amount - (total_amount / 100 * self.discount.amount)
+        #     ).quantize(decimal.Decimal('.01'))
+
         return total_amount
 
+    @hook(AFTER_UPDATE, when='discount', has_changed=True)
+    def set_total_amount(self):
+        self.total_amount = self.get_total_amount()
+        self.save(update_fields=('total_amount',), skip_hooks=True)
 
-class OrderItem(PKMixin):
+
+class OrderItem(LifecycleModelMixin, PKMixin):
     product = models.ForeignKey(
         'products.Product',
         on_delete=models.PROTECT,
@@ -106,9 +119,8 @@ class OrderItem(PKMixin):
     )
     order = models.ForeignKey(
         Order,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         related_name='order_items',
-        null=True
     )
     quantity = models.PositiveSmallIntegerField(default=1)
     price = models.DecimalField(
@@ -118,3 +130,12 @@ class OrderItem(PKMixin):
 
     class Meta:
         unique_together = ('order', 'product')
+
+    @property
+    def sub_total(self):
+        return self.price * self.quantity
+
+    @hook(AFTER_SAVE)
+    def set_order_total_amount(self):
+        self.order.total_amount = self.order.get_total_amount()
+        self.order.save(update_fields=('total_amount',), skip_hooks=True)
