@@ -12,17 +12,13 @@ class OrderItemInline(TabularInline):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     inlines = [OrderItemInline]
+    list_display = ('id', 'order_number', 'total_amount',
+                    'user', 'is_paid', 'is_active')
 
 
 @admin.register(Discount)
 class DiscountAdmin(admin.ModelAdmin):
-    list_display = ('code', 'total_amount', 'discount_type')
-
-
-# @admin.register(Order)
-# class OrderAdmin(admin.ModelAdmin):
-#     list_display = ('order_number', 'total_amount',
-#                     'user', 'is_paid', 'is_active')
+    list_display = ('code', 'amount', 'discount_type')
 
 
 @admin.register(OrderItem)
