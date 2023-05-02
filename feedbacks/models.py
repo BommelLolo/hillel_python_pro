@@ -1,10 +1,12 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator
+from django_lifecycle import LifecycleModelMixin
+
 from project.mixins.models import PKMixin
 
 
-class Feedback(PKMixin):
+class Feedback(LifecycleModelMixin, PKMixin):
     text = models.TextField(
         max_length=1024,
         null=True,

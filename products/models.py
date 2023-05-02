@@ -1,7 +1,10 @@
 from os import path
 
+from django.core.cache import cache
 from django.db import models
 from django.core.validators import MinValueValidator
+from django_lifecycle import LifecycleModelMixin, hook, AFTER_UPDATE, AFTER_CREATE
+
 from project.constants import DECIMAL_PLACES, MAX_DIGITS
 from project.mixins.models import PKMixin
 
@@ -11,7 +14,7 @@ def upload_to(instance, filename):
     return f'products/images/{str(instance.pk)}{extension}'
 
 
-class Category(PKMixin):
+class Category(LifecycleModelMixin, PKMixin):
     name = models.CharField(max_length=255)
     description = models.TextField(
         blank=True,  # empty to Django
@@ -28,7 +31,7 @@ class Category(PKMixin):
         return self.name
 
 
-class Product(PKMixin):
+class Product(LifecycleModelMixin, PKMixin):
     name = models.CharField(max_length=255)
     description = models.TextField(
         blank=True,
@@ -52,3 +55,8 @@ class Product(PKMixin):
 
     def __str__(self):
         return f"{self.name} --- Price {self.price}"
+
+    @hook(AFTER_CREATE)
+    @hook(AFTER_UPDATE)
+    def set_total_amount(self):
+        cache.remove()

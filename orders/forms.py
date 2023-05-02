@@ -48,6 +48,7 @@ class CartForm(forms.Form):
 
 class CartActionForm(forms.Form):
     product_id = forms.UUIDField(required=False)
+    order_item_id = forms.UUIDField(required=False)
 
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.pop('instance')
@@ -74,10 +75,10 @@ class CartActionForm(forms.Form):
             self.instance.is_paid = True
             self.instance.save(update_fields=('is_active', 'is_paid'))
 
+        # doesn't delete the first element in the cart
         if action == 'remove':
-            product = self.cleaned_data['product_id']
-            OrderItem.objects.filter(product=product).delete()
-            self.instance.save()
+            OrderItem.objects.get(id=self.cleaned_data['order_item_id']).delete()
+            # self.instance.save()
 
         if action == 'clear':
             OrderItem.objects.filter(order=self.instance).delete()

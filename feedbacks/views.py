@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
-from feedbacks.model_forms import FeedbackModelForm
+from feedbacks.forms import FeedbackModelForm
 from feedbacks.models import Feedback
 from project.celery import debug_task
 
