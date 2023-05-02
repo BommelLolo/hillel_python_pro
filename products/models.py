@@ -3,7 +3,8 @@ from os import path
 from django.core.cache import cache
 from django.db import models
 from django.core.validators import MinValueValidator
-from django_lifecycle import LifecycleModelMixin, hook, AFTER_UPDATE, AFTER_CREATE
+from django_lifecycle import LifecycleModelMixin, hook, \
+    AFTER_UPDATE, AFTER_CREATE
 
 from project.constants import DECIMAL_PLACES, MAX_DIGITS
 from project.mixins.models import PKMixin

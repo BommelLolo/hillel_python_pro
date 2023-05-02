@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import environ
 from pathlib import Path
 
-from celery.schedules import crontab
+# from celery.schedules import crontab
 from django.urls import reverse_lazy
 
 import sentry_sdk
