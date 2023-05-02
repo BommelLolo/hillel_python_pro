@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import environ
 from pathlib import Path
+
+# from celery.schedules import crontab
 from django.urls import reverse_lazy
 
 import sentry_sdk
@@ -48,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # external
     'widget_tweaks',
+    'django_celery_results',
 
     # internal
     'products',
@@ -147,6 +150,26 @@ MEDIA_ROOT = 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_TASK_ALWAYS_EAGER = False
+
+# CELERY_BEAT_SCHEDULE = {
+#     'Get currencies': {
+#         'task': 'currencies.tasks.get_currencies_task',
+#         'schedule': crontab(hour='12', minute='0'),
+#     }
+# }
+
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+#         'LOCATION': 'redis://127.0.0.1:6379',
+#     }
+# }
+#
+
 sentry_sdk.init(
     dsn="https://dedc08f902a3406f9982023fe43beb1e@o4505081808"
         "486400.ingest.sentry.io/4505081809993728",
@@ -156,7 +179,7 @@ sentry_sdk.init(
     # Set traces_sample_rate to 1.0 to capture 100%
     # of transactions for performance monitoring.
     # We recommend adjusting this value in production.
-    traces_sample_rate=1.0,
+    traces_sample_rate=0.5,
 
     # If you wish to associate users to errors (assuming you are using
     # django.contrib.auth) you may enable sending PII data.

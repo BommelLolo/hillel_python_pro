@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.auth import login
 from django.views.generic import FormView
 
-from accounts.model_forms import RegistrationForm
+from accounts.forms import RegistrationForm
 
 
 class RegistrationView(FormView):

@@ -1,11 +1,11 @@
-# from django.shortcuts import render
 from django.views.generic import ListView, CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
-from feedbacks.model_forms import FeedbackModelForm
+from feedbacks.forms import FeedbackModelForm
 from feedbacks.models import Feedback
+from project.celery import debug_task
 
 
 class FeedbackView(CreateView):
@@ -22,23 +22,16 @@ class FeedbackView(CreateView):
         kwargs.update({'user': self.request.user})
         return kwargs
 
-    # def get_context_data(self, **kwargs):
-    #     kwargs['feedbacks'] = Feedback.objects.iterator()
-    #     kwargs.update({'user': self.request.user})
-    #     context = super().get_context_data(**kwargs)
-    #     # context.update({'form': self.form_class})
-    #     return context
-    #
-    # def post(self, request, *args, **kwargs):
-    #     form = self.form_class(data=request.POST)
-    #     if form.is_valid():
-    #         form.save()
-    #     return render(request, 'feedbacks/index.html', context={
-    #         'feedback': Feedback.objects.iterator()
-    #         # 'form': form
-    #     })
-
 
 class FeedbackList(ListView):
     template_name = 'feedbacks/index.html'
     model = Feedback
+
+    def get(self, request, *args, **kwargs):
+        debug_task.apply_async((2, 6), retry=True, retry_policy={
+            'max_retries': 3,
+            'interval_start': 0,
+            'interval_step': 0.2,
+            'interval_max': 0.2,
+        })
+        return super().get(request, *args, **kwargs)

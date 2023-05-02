@@ -5,33 +5,18 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
-from django.views.generic import FormView, TemplateView
+from django.views.generic import FormView, TemplateView, ListView
 from django.urls import reverse_lazy
-from django.shortcuts import render
 
-from products.model_forms import ProductModelForm, ImportCSVForm
+
+from products.forms import ImportCSVForm
 from products.models import Product
 
 
-class ProductView(FormView):
-    form_class = ProductModelForm
+class ProductView(ListView):
+    context_object_name = 'products'
     template_name = 'products/index.html'
-    success_url = reverse_lazy('products')
-
-    def get(self, request, *args, **kwargs):
-        form = self.form_class(data=request.POST)
-        if form.is_valid():
-            form.save()
-        return render(request, 'products/index.html', context={
-            'products': Product.objects.iterator(),
-            # 'form': form
-        })
-
-    def get_context_data(self, **kwargs):
-        kwargs['products'] = Product.objects.iterator()
-        context = super().get_context_data(**kwargs)
-        context.update({'form': self.form_class})
-        return context
+    model = Product
 
 
 def export_csv(request, *args, **kwargs):

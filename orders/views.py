@@ -4,7 +4,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import FormView, RedirectView
 
 from orders.mixins import GetCurrentOrderMixin
-from orders.model_forms import CartForm, CartActionForm
+from orders.forms import CartForm, CartActionForm
 
 
 class CartView(GetCurrentOrderMixin, FormView):
@@ -39,7 +39,7 @@ class CartView(GetCurrentOrderMixin, FormView):
 
 
 class CartActionView(GetCurrentOrderMixin, RedirectView):
-    url = reverse_lazy('products')
+    url = reverse_lazy('cart')
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
