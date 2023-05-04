@@ -17,19 +17,21 @@
     {% for product in products %}
         <div class="col-12 {% if product.products.exists %}col-lg-12 col-xxl-6 {% else %}col-lg-4 col-xxl-3{% endif %} mt-3 mt-lg-5">
             <div class="card">
-                {% if product.image %}
-                    <figure class="text-center">
-                        <img src="{{ product.image.url }}"
-                             class="product-img p-3"
-                             alt="{{ product.name }}">
-                    </figure>
-                {% else %}
-                    <figure class="text-center">
-                        <img src="{% static 'images/logo.png' %}"
-                             class="product-img p-3"
-                             alt="{{ product.name }}">
-                    </figure>
-                {% endif %}
+                <a href="{% url 'product' product.id %}">
+                    {% if product.image %}
+                        <figure class="text-center">
+                            <img src="{{ product.image.url }}"
+                                 class="product-img p-3"
+                                 alt="{{ product.name }}">
+                        </figure>
+                    {% else %}
+                        <figure class="text-center">
+                            <img src="{% static 'images/logo.png' %}"
+                                 class="product-img p-3"
+                                 alt="{{ product.name }}">
+                        </figure>
+                    {% endif %}
+                </a>
                 <div class="card-body">
                     <h5 class="card-title product-name"> {{ product.name }}</h5>
                     <p class="small">
@@ -65,17 +67,17 @@
                                class="btn btn-warning w-100">
                     </form>
 
-{#                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"#}
-{#                         aria-labelledby="offcanvasRightLabel">#}
-{#                        <div class="offcanvas-header">#}
-{#                            <h5 class="offcanvas-title" id="offcanvasRightLabel">Cart</h5>#}
-{#                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"#}
-{#                                    aria-label="Close"></button>#}
-{#                        </div>#}
-{#                        <div class="offcanvas-body">#}
-{#                            Cart#}
-{#                        </div>#}
-{#                    </div>#}
+                    {#                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"#}
+                    {#                         aria-labelledby="offcanvasRightLabel">#}
+                    {#                        <div class="offcanvas-header">#}
+                    {#                            <h5 class="offcanvas-title" id="offcanvasRightLabel">Cart</h5>#}
+                    {#                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"#}
+                    {#                                    aria-label="Close"></button>#}
+                    {#                        </div>#}
+                    {#                        <div class="offcanvas-body">#}
+                    {#                            Cart#}
+                    {#                        </div>#}
+                    {#                    </div>#}
 
                 </div>
             </div>

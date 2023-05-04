@@ -13,11 +13,11 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import environ
 from pathlib import Path
 
-# from celery.schedules import crontab
+from celery.schedules import crontab
 from django.urls import reverse_lazy
 
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
+# import sentry_sdk
+# from sentry_sdk.integrations.django import DjangoIntegration
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     # external
     'widget_tweaks',
     'django_celery_results',
+    'django_celery_beat',
+    'django_extensions',
 
     # internal
     'products',
@@ -58,7 +60,8 @@ INSTALLED_APPS = [
     'feedbacks',
     'accounts',
     'main',
-    'tracking'
+    'tracking',
+    'currencies'
 ]
 
 MIDDLEWARE = [
@@ -155,33 +158,40 @@ CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_TASK_ALWAYS_EAGER = False
 
-# CELERY_BEAT_SCHEDULE = {
-#     'Get currencies': {
-#         'task': 'currencies.tasks.get_currencies_task',
-#         'schedule': crontab(hour='12', minute='0'),
-#     }
-# }
+CELERY_BEAT_SCHEDULE = {
+    'Get currencies': {
+        'task': 'currencies.tasks.get_currencies_task',
+        'schedule': crontab(hour='17', minute='0'),
+    },
+    'Set currencies': {
+        'task': 'currencies.tasks.set_currencies_task',
+        'schedule': crontab(hour='17', minute='2'),
+    }
+}
 
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-#         'LOCATION': 'redis://127.0.0.1:6379',
-#     }
-# }
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
+        "TIMEOUT": 3600,
+    }
+}
+
+
+# tool for error's monitoring
+
+# sentry_sdk.init(
+#     dsn="https://dedc08f902a3406f9982023fe43beb1e@o4505081808"
+#         "486400.ingest.sentry.io/4505081809993728",
+#     integrations=[
+#         DjangoIntegration(),
+#     ],
+#     # Set traces_sample_rate to 1.0 to capture 100%
+#     # of transactions for performance monitoring.
+#     # We recommend adjusting this value in production.
+#     traces_sample_rate=0.5,
 #
-
-sentry_sdk.init(
-    dsn="https://dedc08f902a3406f9982023fe43beb1e@o4505081808"
-        "486400.ingest.sentry.io/4505081809993728",
-    integrations=[
-        DjangoIntegration(),
-    ],
-    # Set traces_sample_rate to 1.0 to capture 100%
-    # of transactions for performance monitoring.
-    # We recommend adjusting this value in production.
-    traces_sample_rate=0.5,
-
-    # If you wish to associate users to errors (assuming you are using
-    # django.contrib.auth) you may enable sending PII data.
-    send_default_pii=True
-)
+#     # If you wish to associate users to errors (assuming you are using
+#     # django.contrib.auth) you may enable sending PII data.
+#     send_default_pii=True
+# )

@@ -6,7 +6,7 @@ from project.mixins.admins import ImageSnapshotAdminMixin
 
 @admin.register(Product)
 class ProductAdmin(ImageSnapshotAdminMixin, admin.ModelAdmin):
-    list_display = ('name', 'price', "is_active")
+    list_display = ('name', 'price', 'currency', "is_active")
     filter_horizontal = ('categories', 'products')  # for parameters ManyToMany
 
 

@@ -8,6 +8,7 @@ from django_lifecycle import LifecycleModelMixin, hook, \
 
 from project.constants import DECIMAL_PLACES, MAX_DIGITS
 from project.mixins.models import PKMixin
+from project.model_choices import ProductCacheKeys, Currencies
 
 
 def upload_to(instance, filename):
@@ -53,11 +54,48 @@ class Product(LifecycleModelMixin, PKMixin):
         max_digits=MAX_DIGITS,
         decimal_places=DECIMAL_PLACES
     )
+    currency = models.CharField(
+        choices=Currencies.choices,
+        default=Currencies.UAH,
+        max_length=16
+    )
 
     def __str__(self):
         return f"{self.name} --- Price {self.price}"
 
+    # def calc_price_UAH(self):
+    #
+    #     # Currencies(sorted(x.items(), key=lambda item: item[1]))
+    #
+    #     rate_usd = Currencies['']
+    #
+    #     if self.currency == Currencies.UAH:
+    #         price_UAH = self.price
+    #     elif self.currency == Currencies.USD:
+    #         price_UAH = self.price
+        #
+        # if self.discount and self.discount.is_valid:
+        #     if self.discount.discount_type == DiscountTypes.VALUE:
+        #         total_amount -= self.discount.amount
+        #     else:
+        #         total_amount = total_amount * \
+        #                        (1 - self.discount.amount / 100)
+
+        # if self.discount and self.discount.is_valid:
+        #     total_amount = (
+        #         total_amount - self.discount.amount
+        #         if self.discount.discount_type == DiscountTypes.VALUE else
+        #         total_amount - (total_amount / 100 * self.discount.amount)
+        #     ).quantize(decimal.Decimal('.01'))
+
+        # return total_amount
+    #
+    # @hook(AFTER_UPDATE, when='discount', has_changed=True)
+    # def set_total_amount(self):
+    #     self.total_amount = self.get_total_amount()
+    #     self.save(update_fields=('total_amount',), skip_hooks=True)
+
     @hook(AFTER_CREATE)
     @hook(AFTER_UPDATE)
-    def set_total_amount(self):
-        cache.remove()
+    def after_signal(self):
+        cache.delete(ProductCacheKeys.PRODUCTS)

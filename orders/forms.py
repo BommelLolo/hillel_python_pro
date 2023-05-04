@@ -77,9 +77,11 @@ class CartActionForm(forms.Form):
 
         # doesn't delete the first element in the cart
         if action == 'remove':
-            OrderItem.objects.get(
+            OrderItem.objects.filter(
                 id=self.cleaned_data['order_item_id']
             ).delete()
+            self.instance.set_total_amount()
+            self.instance.save()
 
         if action == 'clear':
             OrderItem.objects.filter(order=self.instance).delete()
