@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<title>{% block title %}
+    {{ product.name }}
+{% endblock title %}</title>
+
+{% block content %}
+    <h1 class="display-7"> {{ products.name }} </h1>
+
+    <div class="col-12 col-lg-4">
+        {% if products.image %}
+            <figure class="text-center">
+                <img src="{{ products.image.url }}"
+                     class="product-img p-3"
+                     alt="{{ product.name }}">
+            </figure>
+        {% else %}
+            <figure class="text-center">
+                <img src="{% static 'images/logo.png' %}"
+                     class="product-img p-3"
+                     alt="{{ product.name }}">
+            </figure>
+        {% endif %}
+    </div>
+    <div class="col-12 col-lg-8">
+        <p class="card-text">
+            {% for category in products.categories.iterator %}
+                <span class="text-success"> Category: {{ category.name }} </span>
+            {% endfor %}
+        </p>
+        <p class="card-text">
+            Description:
+            {{ products.description }}
+        </p>
+        <p class="text-primary">
+            Price {{ products.price }} {{ products.currency }}
+        </p>
+        {#subproducts#}
+        {% if products.products.exists %}
+            <p>Including</p>
+            {% for sub in products.products.iterator %}
+                <div class="d-inline-flex flex-column rounded border p-2 m-1 sub-product">
+                    <p class="product-name">{{ sub.name }}</p>
+                    <figure class="text-center d-inline">
+                        <img src="{{ sub.image.url }}"
+                             class="product-img p-3"
+                             alt="{{ product.name }}">
+                    </figure>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock content %}
