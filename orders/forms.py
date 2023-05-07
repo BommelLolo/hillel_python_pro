@@ -61,13 +61,20 @@ class CartActionForm(forms.Form):
             except Product.DoesNotExist:
                 raise ValidationError('Wrong product id.')
 
+    # def clean_order_item_id(self):
+    #     if self.cleaned_data.get('order_item_id') and \
+    #             not self.instance.order_items.filter(
+    #             id=self.cleaned_data['order_item_id']).exists():
+    #         raise ValidationError('Wrong order item id')
+    #     return self.cleaned_data['order_item_id']
+
     def action(self, action):
         if action == 'add':
             product = self.cleaned_data['product_id']
             OrderItem.objects.get_or_create(
                 order=self.instance,
                 product=product,
-                defaults=dict(price=product.price),
+                defaults=dict(price=product.price_uah),
             )
 
         if action == 'pay':
@@ -75,7 +82,6 @@ class CartActionForm(forms.Form):
             self.instance.is_paid = True
             self.instance.save(update_fields=('is_active', 'is_paid'))
 
-        # doesn't delete the first element in the cart
         if action == 'remove':
             OrderItem.objects.filter(
                 id=self.cleaned_data['order_item_id']

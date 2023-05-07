@@ -133,7 +133,7 @@ class OrderItem(LifecycleModelMixin, PKMixin):
 
     @property
     def sub_total(self):
-        return self.price * self.quantity
+        return self.product.price_uah * self.quantity
 
     @hook(AFTER_SAVE)
     def set_order_total_amount(self):

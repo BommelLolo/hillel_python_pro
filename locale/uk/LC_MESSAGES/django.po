@@ -1,0 +1,122 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-05-07 19:58+0300\n"
+"PO-Revision-Date: 2023-05-07 20:00+0300\n"
+"Last-Translator: Igor Lobach <lobach.igor.olegovich@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"X-Translated-Using: django-rosetta 0.9.9\n"
+
+#: project/settings.py:138
+msgid "Ukrainian"
+msgstr "Українська"
+
+#: project/settings.py:139
+msgid "English"
+msgstr "English"
+
+#: templates/feedbacks/create.html:4 templates/feedbacks/create.html:9
+#| msgid "Feedbacks"
+msgid "New Feedback"
+msgstr "Новий відгук"
+
+#: templates/feedbacks/index.html:4 templates/feedbacks/index.html:9
+#: templates/parts/header.html:22
+msgid "Feedbacks"
+msgstr "Відгуки"
+
+#: templates/feedbacks/index.html:17
+#, python-format
+msgid " %(feedback.created_at|date:\"d M Y\")s  "
+msgstr ""
+
+#: templates/feedbacks/index.html:31
+msgid "Write your feedback"
+msgstr "Написати відгук"
+
+#: templates/orders/cart.html:4 templates/orders/cart.html:10
+msgid "Your cart"
+msgstr "Ваша корзина"
+
+#: templates/orders/cart.html:17
+#| msgid "Products"
+msgid "Product"
+msgstr "Товар"
+
+#: templates/orders/cart.html:18
+msgid "Quantity"
+msgstr "Кількість"
+
+#: templates/orders/cart.html:19
+msgid "Price"
+msgstr "Ціна"
+
+#: templates/orders/cart.html:20
+msgid "Subtotal"
+msgstr "Вартість"
+
+#: templates/orders/cart.html:68
+#| msgid "Subtotal"
+msgid "Total"
+msgstr "Загальна вартість"
+
+#: templates/orders/cart.html:77
+msgid "Have a discount code? Please enter here."
+msgstr "Маєте знижку? Будь ласка, введіть сюди"
+
+#: templates/orders/cart.html:85
+msgid "You already applied discount."
+msgstr "Ви вже застосували знижку"
+
+#: templates/orders/cart.html:89
+msgid "Recalculate"
+msgstr "Перерахувати"
+
+#: templates/orders/cart.html:95
+msgid "Pay order"
+msgstr "Сплатити"
+
+#: templates/orders/cart.html:101
+msgid "Clear this order"
+msgstr "Очистити корзину"
+
+#: templates/orders/cart.html:124
+#| msgid "Your cart"
+msgid "Your cart is empty."
+msgstr "Ваша корзина порожня"
+
+#: templates/orders/cart.html:125
+msgid "Return to products"
+msgstr "Повернутися до вибору товарів"
+
+#: templates/parts/header.html:14
+msgid "Home"
+msgstr "Головна"
+
+#: templates/parts/header.html:18
+msgid "Products"
+msgstr "Товари"
+
+#: templates/parts/header.html:41
+msgid "Logout"
+msgstr "Вихід"
+
+#: templates/parts/header.html:64
+msgid "Login"
+msgstr "Вхід"
+
+#: templates/parts/header.html:68
+msgid "SignUp"
+msgstr "Зареєструватися"

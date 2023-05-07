@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import environ
 from pathlib import Path
+from django.utils.translation import gettext_lazy as _
 
 from celery.schedules import crontab
 from django.urls import reverse_lazy
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
     'django_celery_results',
     'django_celery_beat',
     'django_extensions',
+    'rosetta',
 
     # internal
     'products',
@@ -72,7 +74,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'project.middlewares.TrackingMiddleware'
+    'project.middlewares.TrackingMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -125,11 +128,21 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LOGIN_REDIRECT_URL = reverse_lazy("main")
 LOGOUT_REDIRECT_URL = LOGIN_REDIRECT_URL
+AUTH_USER_MODEL = 'accounts.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
+
+LANGUAGES = [
+    ('uk', _('Ukrainian')),
+    ('en', _('English')),
+]
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale'
+]
 
 TIME_ZONE = 'Europe/Kiev'
 
@@ -156,16 +169,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = 'django-db'
-CELERY_TASK_ALWAYS_EAGER = False
 
 CELERY_BEAT_SCHEDULE = {
     'Get currencies': {
         'task': 'currencies.tasks.get_currencies_task',
-        'schedule': crontab(hour='10', minute='0'),
+        'schedule': crontab(hour='19', minute='0'),
     },
     'Set currencies': {
         'task': 'currencies.tasks.set_currencies_task',
-        'schedule': crontab(hour='10', minute='5'),
+        'schedule': crontab(hour='19', minute='2'),
     }
 }
 
@@ -202,3 +214,8 @@ CACHES = {
 #     # django.contrib.auth) you may enable sending PII data.
 #     send_default_pii=True
 # )
+
+try:
+    from settings_local import *  # no qa
+except ImportError:
+    ...
