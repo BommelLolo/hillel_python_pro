@@ -1,62 +1,77 @@
 {% load static %}
-
+{% load i18n %}
 <header>
     <nav class="navbar navbar-expand-lg bg-info-subtle">
         <div class="container-fluid">
-            <a class="navbar-brand justify-content-center" href="{% url 'main' %}">
+            <a class="navbar-brand justify-content-center px-5" href="{% url 'main' %}">
                 <img id="logo" class="logo" src="{% static 'images/logo.png' %}" alt="logo">
             </a>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 w-100">
                     {% if request.user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url 'main' %}">Home</a>
+                            <a class="nav-link active" aria-current="page"
+                               href="{% url 'main' %}">{% translate 'Home' %}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url 'products' %}">Products</a>
+                            <a class="nav-link active" aria-current="page"
+                               href="{% url 'products' %}">{% translate 'Products' %}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url 'feedbacks' %}">Feedbacks</a>
+                            <a class="nav-link active" aria-current="page"
+                               href="{% url 'feedbacks' %}">{% translate 'Feedbacks' %}</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url 'logout' %}">Logout</a>
+                        <li class="nav-item mx-auto p-2">
                         </li>
-                        <li class="nav-item position-relative ms-5">
-                            <a class="nav-link text-success"
-                               aria-current="page">{{ request.user.username.capitalize }}</a>
-                        </li>
-                        <li class="ms-auto nav-item">
+                        <li class="nav-item me-5">
                             <a class="nav-link active" aria-current="page"
                                href="{% url 'cart' %}">
-
-                                {#                                if OrderItems in the Cart, then the Cart's image have to be full.#}
-                                {#                                What condition need to choose???#}
-                                {#                                {% if order_items  %}#}
-                                {#                                <svg xmlns="http://www.w3.org/2000/svg"#}
-                                {#                                     width="16" height="16" fill="currentColor"#}
-                                {#                                     class="bi bi-cart-fill position-relative"#}
-                                {#                                     viewBox="0 0 16 16">#}
-                                {#                                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>#}
-                                {#                                </svg>#}
-                                {#                                        {% else %}#}
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                      width="16" height="16" fill="currentColor"
-                                     class="bi bi-cart position-relative"
+                                     class="bi bi-cart4"
                                      viewBox="0 0 16 16">
                                     <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
                                 </svg>
-                                {#                            {% endif %}#}
                             </a>
+                        </li>
+                        <li class="me-5 nav-item">
+                            <a class="nav-link text-success"
+                               aria-current="page">{{ request.user.username.capitalize }}</a>
+                        </li>
+                        <li class="me-5 nav-item">
+                            <a class="nav-link active" aria-current="page"
+                               href="{% url 'logout' %}">{% translate 'Logout' %}</a>
+                        </li>
+                        <li class="pe-5 mx-5 nav-item">
+                            <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+                                <form>
+                                    <input name="next" type="hidden" value="{{ redirect_to }}">
+                                    <select name="language">
+                                        {% get_current_language as LANGUAGE_CODE %}
+                                        {% get_available_languages as LANGUAGES %}
+                                        {% get_language_info_list for LANGUAGES as languages %}
+                                        {% for language in languages %}
+                                            <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %}
+                                                    selected{% endif %}>
+                                                {{ language.name_local }} ({{ language.code }})
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                    <input type="submit" value="Go">
+                                </form>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url 'login' %}">Login</a>
+                            <a class="nav-link active" aria-current="page"
+                               href="{% url 'login' %}">{% translate 'Login' %}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url 'signup' %}">SignUp</a>
+                            <a class="nav-link active" aria-current="page"
+                               href="{% url 'signup' %}">{% translate 'SignUp' %}</a>
                         </li>
                     {% endif %}
                 </ul>
+
             </div>
         </div>
     </nav>

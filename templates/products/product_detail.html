@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load i18n %}
 <title>{% block title %}
     {{ product.name }}
 {% endblock title %}</title>
@@ -34,7 +34,7 @@
             {{ products.description }}
         </p>
         <p class="text-primary">
-            Price {{ products.price_uah }} {{ products.currency }}
+            Price {{ products.price_uah }} UAH
         </p>
         {#subproducts#}
         {% if products.products.exists %}

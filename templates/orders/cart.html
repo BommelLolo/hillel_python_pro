@@ -1,23 +1,23 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 <title>{% block title %}
-    Your cart
+    {% translate 'Your cart' %}
 {% endblock title %}</title>
 
 {% block content %}
     <div class="col-12 my-3 my-lg-5">
         {% if order_items %}
-            <h2 class="position-relative start-50">Your cart</h2>
+            <h2 class="position-relative start-50">{% translate 'Your cart' %}</h2>
             <form method="post">
                 {% csrf_token %}
                 <table class="table">
                     <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Product</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Subtotal</th>
+                        <th scope="col">{% translate 'Product' %}</th>
+                        <th scope="col">{% translate 'Quantity' %}</th>
+                        <th scope="col">{% translate 'Price' %}</th>
+                        <th scope="col">{% translate 'Subtotal' %}</th>
                         <th scope="col"></th>
                     </tr>
                     </thead>
@@ -41,7 +41,7 @@
                                        min="1">
                             </td>
                             <td class="col-1">
-                                {{ item.price }}
+                                {{ item.product.price_uah }}
                             </td>
                             <td class="col-1">
                                 {{ item.sub_total }}
@@ -65,7 +65,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td>Total:</td>
+                        <td>{% translate 'Total' %}:</td>
                         <td>{{ order.total_amount }}</td>
                     </tr>
                     </tbody>
@@ -73,29 +73,32 @@
                         <td></td>
                         {#                        <td></td>#}
                         {% if not order.discount %}
-                            <td><label for="id_discount">Have a discount code?
-                                Please enter here.</label></td>
+                            <td><label for="id_discount">
+                                {% translate 'Have a discount code? Please enter here.' %}
+                            </label></td>
                             <td><input class="form-control" id="id_discount"
                                        type="text"
                                        name="discount"></td>
 
                         {% else %}
-                            <td colspan="2">You already applied discount.</td>
+                            <td colspan="2">
+                                {% translate 'You already applied discount.' %}
+                            </td>
                         {% endif %}
                         <td><input type="submit" class="btn btn-primary"
-                                   value="Recalculate"></td>
+                                   value="{% translate 'Recalculate' %}"></td>
                     </tr>
                 </table>
             </form>
             <form method="post" action="{% url 'cart_action' 'pay' %}">
                 {% csrf_token %}
-                <input type="submit" value="Pay order"
+                <input type="submit" value="{% translate 'Pay order' %}"
                        class="btn btn-warning w-100">
             </form>
 
             <form method="post" action="{% url 'cart_action' 'clear' %}">
                 {% csrf_token %}
-                <input type="submit" value="Clear this order"
+                <input type="submit" value="{% translate 'Clear this order' %}"
                        class="col-2 btn btn-info position-relative start-50 mt-5">
             </form>
 
@@ -118,8 +121,8 @@
                 </div>
             {% endif %}
         {% else %}
-            <h2>Your cart is empty.</h2>
-            <p><a href="{% url 'products' %}">Return to products</a></p>
+            <h2>{% translate 'Your cart is empty.' %}</h2>
+            <p><a href="{% url 'products' %}">{% translate 'Return to products' %}</a></p>
         {% endif %}
     </div>
 {% endblock content %}

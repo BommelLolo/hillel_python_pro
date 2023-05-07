@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 <title>{% block title %}
-    Feedbacks
+    {%  translate 'Feedbacks' %}
 {% endblock title %}</title>
 
 {% block content %}
     <div class="col-12 col-lg-6 offset-lg-3">
-        <h2>Feedbacks</h2>
+        <h2>{%  translate 'Feedbacks' %}</h2>
         <ul class="list-group py-3">
             {% for feedback in object_list %}
                 <li class="list-group-item ">
@@ -14,7 +14,8 @@
                        data-bs-toggle="collapse"
                        href="#collapse{{ feedback.id }}">
                         <span> {{ feedback.user.first_name }} {% include 'parts/stars.html' with count=feedback.rating %} </span>
-                        <span> {{ feedback.created_at|date:"d M Y" }} </span>
+                        <span> {% blocktranslate %} {{ feedback.created_at|date:"d M Y" }}  {% endblocktranslate %}</span>
+
                     </a>
                     <div class="collapse pt-3" id="collapse{{ feedback.id }}">
                         {{ feedback.text }}
@@ -27,7 +28,7 @@
 
         </ul>
         <div class="my-3 text-center">
-            <a href="{% url 'feedback_create' %}">Write your feedback</a>
+            <a href="{% url 'feedback_create' %}">{% translate 'Write your feedback' %}</a>
         </div>
     </div>
 {% endblock content %}

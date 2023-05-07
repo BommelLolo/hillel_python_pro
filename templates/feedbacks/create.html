@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 <title>{% block title %}
-    Feedback new
+    {% translate 'New Feedback' %}
 {% endblock title %}</title>
 
 {% block content %}
     <div class="col-12 col-lg-6 offset-lg-3">
-        <h2>New Feedback</h2>
+        <h2>{% translate 'New Feedback' %}</h2>
         <form method="post">
             {% include 'parts/form.html' with form=form %}
             <input type="submit" class="btn btn-primary" value="Save">
