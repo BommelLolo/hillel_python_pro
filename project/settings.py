@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 import environ
-import pymemcache.serde
 from pathlib import Path
 
 from celery.schedules import crontab
@@ -185,8 +184,6 @@ CACHES = {
         "TIMEOUT": 3600,
     }
 }
-
-
 
 # tool for error's monitoring
 
