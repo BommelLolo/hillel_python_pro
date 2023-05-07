@@ -13,12 +13,13 @@ from project.celery import app
 @app.task
 def delete_old_currencies():
     CurrencyHistory.objects.filter(
-        created_at__lt=timezone.now() - timedelta(days=7)
+        created_at__lt=timezone.now() - timedelta(days=3)
     ).delete()
 
 
 @shared_task
 def get_currencies_task():
+    nationbank_client.prepare_data()
     monobank_client.prepare_data()
     privatbank_client.prepare_data()
 
@@ -29,13 +30,14 @@ def set_currencies_task():
     # currency rate analyze
     res = []
     history = []
-    if nationbank_client.results:
-        res = nationbank_client.results
-    elif monobank_client.results:
+
+    if monobank_client.results:
         res = monobank_client.results
+    elif nationbank_client.results:
+        res = nationbank_client.results
     elif privatbank_client.results:
         res = privatbank_client.results
     for i in res:
         history.append(CurrencyHistory(**i))
-    # if history:
-    CurrencyHistory.objects.bulk_create(history)
+    if history:
+        CurrencyHistory.objects.bulk_create(history)

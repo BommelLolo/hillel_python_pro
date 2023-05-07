@@ -6,11 +6,15 @@ from project.model_choices import Currencies
 
 
 def get_usd_rate():
-    return CurrencyHistory.objects.filter(code=Currencies.USD).latest()('buy')
+    return CurrencyHistory.objects.filter(
+        code=Currencies.USD
+    ).latest('created_at').sale
 
 
 def get_euro_rate():
-    return CurrencyHistory.objects.filter(code=Currencies.EUR).latest()('buy')
+    return CurrencyHistory.objects.filter(
+        code=Currencies.EUR
+    ).latest('created_at').sale
 
 
 class CurrencyHistory(PKMixin):

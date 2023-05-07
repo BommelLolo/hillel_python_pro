@@ -43,7 +43,7 @@
                         {{ product.description|truncatewords:16 }}
                     </p>
                     <p class="card-text">
-                        {{ product.price }}
+                        {{ product.price_uah }}
                     </p>
                     {#subproducts#}
                     {% if product.products.exists %}
