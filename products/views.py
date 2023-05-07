@@ -78,7 +78,8 @@ def export_csv(request, *args, **kwargs):
         'Content-Disposition': 'attachment; filename="VolleyMAG-products.csv"'
     }
     response = HttpResponse(headers=headers)
-    fields_name = ['name', 'description', 'sku', 'image', 'price', 'currency', 'is_active']
+    fields_name = ['name', 'description', 'sku', 'image',
+                   'price', 'currency', 'is_active']
     writer = csv.DictWriter(response, fieldnames=fields_name)
     writer.writeheader()
     for product in Product.objects.iterator():

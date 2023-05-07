@@ -216,6 +216,6 @@ CACHES = {
 # )
 
 try:
-    from settings_local import *  # no qa
+    from settings_local import *  # noqa
 except ImportError:
     ...

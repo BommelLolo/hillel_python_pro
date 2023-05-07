@@ -1,7 +1,6 @@
-from django.apps import apps
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth.models import PermissionsMixin, AbstractUser, \
+from django.contrib.auth.models import PermissionsMixin, \
     UserManager as AuthUserManager
 from django.core.mail import send_mail
 from django.db import models
@@ -18,12 +17,6 @@ class UserManager(AuthUserManager):
         if not email:
             raise ValueError("The given email must be set")
         email = self.normalize_email(email)
-        # Lookup the real model class from the global app registry so this
-        # manager method can be used in migrations. This is fine because
-        # managers are by definition working on the real model.
-        GlobalUserModel = apps.get_model(
-            self.model._meta.app_label, self.model._meta.object_name
-        )
         user = self.model(email=email, **extra_fields)
         user.password = make_password(password)
         user.save(using=self._db)
@@ -51,7 +44,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(
         _("staff status"),
         default=False,
-        help_text=_("Designates whether the user can log into this admin site."),
+        help_text=_("Designates whether the user "
+                    "can log into this admin site."),
     )
     is_active = models.BooleanField(
         _("active"),
