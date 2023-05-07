@@ -27,7 +27,7 @@ class PrivatBank(APIBaseClient):
                 self.results.append({
                     'code': i['ccy'],
                     'buy': i['buy'],
-                    'sale': i['sale'],
+                    'sale': i['sale']
                 })
 
 

@@ -24,11 +24,11 @@ class NationBank(APIBaseClient):
         self.results = []
         if self.response:
             for i in self.response.json():
-                if i['r030'] == (840 or 978):
+                if (i['r030'] == 840) or (i['r030'] == 978):
                     self.results.append({
                         'code': i['cc'],
                         'buy': i['rate'],
-                        'sale': i['rate'],
+                        'sale': i['rate']
                     })
 
 

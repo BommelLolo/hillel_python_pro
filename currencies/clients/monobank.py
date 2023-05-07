@@ -25,7 +25,7 @@ class MonoBank(APIBaseClient):
                 self.results.append({
                     'code': i['currencyCodeA'],
                     'buy': i['rateBuy'],
-                    'sale': i['rateSell'],
+                    'sale': i['rateSell']
                 })
 
 
