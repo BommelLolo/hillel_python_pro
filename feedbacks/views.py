@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.views.generic import ListView, CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
@@ -6,6 +7,7 @@ from django.utils.decorators import method_decorator
 from feedbacks.forms import FeedbackModelForm
 from feedbacks.models import Feedback
 from project.celery import debug_task
+from project.model_choices import FeedbackCacheKeys
 
 
 class FeedbackView(CreateView):
@@ -35,3 +37,18 @@ class FeedbackList(ListView):
             'interval_max': 0.2,
         })
         return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        queryset = cache.get(FeedbackCacheKeys.FEEDBACKS)
+        if not queryset:
+            print('TO CACHE')
+            queryset = Feedback.objects.all()
+            cache.set(FeedbackCacheKeys.FEEDBACKS, queryset)
+
+        ordering = self.get_ordering()
+        if ordering:
+            if isinstance(ordering, str):
+                ordering = (ordering,)
+            queryset = queryset.order_by(*ordering)
+
+        return queryset

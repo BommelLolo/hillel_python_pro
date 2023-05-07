@@ -169,14 +169,21 @@ CELERY_BEAT_SCHEDULE = {
     }
 }
 
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.redis.RedisCache",
+#         "LOCATION": "redis://127.0.0.1:6379",
+#         "TIMEOUT": 3600,
+#     }
+# }
+
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379",
+        "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
+        "LOCATION": "127.0.0.1:11211",
         "TIMEOUT": 3600,
     }
 }
-
 
 # tool for error's monitoring
 

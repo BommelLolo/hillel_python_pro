@@ -22,7 +22,6 @@ class ProductView(ListView):
     def get_queryset(self):
         queryset = cache.get(ProductCacheKeys.PRODUCTS)
         if not queryset:
-            print('TO CACHE')
             queryset = Product.objects.all()
             cache.set(ProductCacheKeys.PRODUCTS, queryset)
 
