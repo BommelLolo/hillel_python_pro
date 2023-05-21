@@ -1,15 +1,15 @@
+from django.contrib.auth.views import LogoutView
 from django.urls import path
-from django.urls import include
 
-from accounts.views import RegistrationView
-
-# from accounts.views import LoginView, LogoutView
+from accounts.views import RegistrationView, \
+    LoginView, ProfileView, PhoneCheckView
 
 urlpatterns = [
-    # path('login/', LoginView.as_view(), name='login'),
-    # path('logout/', LogoutView.as_view(), name='logout')
-
-    # with this auth we don't need our urls and views
-    path('', include('django.contrib.auth.urls')),
-    path('signup/', RegistrationView.as_view(), name='signup')
+    # path('', include('django.contrib.auth.urls')),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('signup/', RegistrationView.as_view(), name='signup'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('id<int:user_id>/', ProfileView.as_view(), name='profile'),
+    # path('profile/', ProfileView.as_view(), name='profile'),
+    path('phone_check/', PhoneCheckView.as_view(), name='phone_check'),
 ]
