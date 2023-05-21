@@ -1,7 +1,8 @@
 from django.contrib.auth.views import LogoutView
 from django.urls import path
 
-from accounts.views import RegistrationView, LoginView, ProfileView, PhoneCheckView
+from accounts.views import RegistrationView, \
+    LoginView, ProfileView, PhoneCheckView
 
 urlpatterns = [
     # path('', include('django.contrib.auth.urls')),

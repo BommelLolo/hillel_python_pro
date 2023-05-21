@@ -1,4 +1,3 @@
-from django.core.mail import mail_admins
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, FormView
 from django.utils.translation import gettext_lazy as _
