@@ -1,6 +1,10 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, \
+    AuthenticationForm as AuthAuthenticationForm
 from django.core.exceptions import ValidationError
+from django.utils.text import capfirst
+from django.utils.translation import gettext_lazy as _
+from django import forms
 
 User = get_user_model()
 
@@ -29,28 +33,17 @@ class RegistrationForm(UserCreationForm):
         user.set_password(self.cleaned_data['password1'])
         if commit:
             user.save()
-            return user
+        return user
 
-# not need with the last realization of views
 
-# from django import forms
-# from django.contrib.auth import authenticate
-# from django.core.exceptions import ValidationError
-#
-#
-# class LoginForm(forms.Form):
-#     username = forms.CharField()
-#     password = forms.CharField(
-#         widget=forms.PasswordInput()
-#     )
-#
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         self.user = None
-#
-#     def clean(self):
-#         self.user = authenticate(username=self.cleaned_data.get('username'),
-#                                  password=self.cleaned_data.get('password'))
-#         if self.user is None:
-#             raise ValidationError('Error')
-#         return self.cleaned_data
+class AuthenticationForm(AuthAuthenticationForm):
+    def __init__(self, request=None, *args, **kwargs):
+        super().__init__(request=request, *args, **kwargs)
+        self.fields["username"].label = _(
+            f'{capfirst(self.username_field.verbose_name)} or Phone number')
+
+
+class ProfileModelForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email', 'phone', 'is_phone_valid')

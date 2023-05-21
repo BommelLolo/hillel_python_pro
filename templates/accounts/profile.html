@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load i18n %}
+<title>{% block title %}
+    {% translate 'Profile' %}
+{% endblock title %}</title>
+
+{% block content %}
+    <h1 class="display-7 text-center my-3"> {% translate 'Your profile' %} </h1>
+    <div class="col-12 col-lg-2"></div>
+    <div class="col-12 col-lg-8">
+        <div class="table-responsive">
+            <table class="table table-borderless">
+                <thead>
+                <tr>
+                    <td> {% translate 'email:' %} </td>
+                    <td> {{ user.email }} </td>
+                    <td></td>
+                </tr>
+                </thead>
+                <tbody>
+                <form method="post">
+                    {% csrf_token %}
+                    <tr>
+                        <td>{% translate 'First name:' %}</td>
+                        <td>
+                            {% if user.first_name %}
+                                {{ user.first_name }}
+                            {% else %}
+                                <form method="post">
+                                    {% csrf_token %}
+                                    {#                        <label for="first_name"></label>#}
+                                    <input type="{{ user.first_name.widget.input_type }}"
+                                           class="form-control"
+                                           id="first_name"
+                                           name="{{ user.first_name }}"
+                                           value="">
+                                </form>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not user.first_name %}
+                                <input type="submit"
+                                       class="btn btn-primary"
+                                       value="Save"
+                                       name="{{ user.first_name }}">
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{% translate 'Last name:' %}</td>
+                        <td>
+                            {% if user.last_name %}
+                                {{ user.last_name }}
+                            {% else %}
+                                {#                        <label for="first_name"></label>#}
+                                <input type="{{ user.last_name.widget.input_type }}"
+                                       class="form-control"
+                                       id="first_name"
+                                       name="{{ user.last_name }}"
+                                       value="">
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not user.last_name %}
+                                <input type="submit"
+                                       class="btn btn-primary"
+                                       value="Save"
+                                       name="{{ user.last_name }}">
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{% translate 'Phone number:' %}</td>
+                        <td>
+                            {% if user.phone %}
+                                {% if user.is_phone_valid %}
+                                    <span class="text-active"> {{ user.phone }}</span>
+                                {% else %}
+                                    {{ user.phone }}
+                                    <span class="text-danger"> {% translate ' -- Phone number is needed to be verified' %} </span>
+                                {% endif %}
+                            {% else %}
+
+                                {#                        <label for="first_name"></label>#}
+                                <input type="{{ user.phone.widget.input_type }}"
+                                       class="form-control"
+                                       id="first_name"
+                                       name="{{ user.phone }}"
+                                       value="">
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not user.phone %}
+                                <input type="submit"
+                                       class="btn btn-primary"
+                                       value="Save"
+                                       name="{{ user.phone }}">
+                            {% endif %}
+                            {% if user.phone %}
+                                {% if not user.is_phone_valid %}
+                                    <a aria-current="page" href="{% url 'phone_check' %}">
+                                        <input type="submit" class="btn btn-primary" value="Verify">
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                </form>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-12 col-lg-2"></div>
+{% endblock content %}

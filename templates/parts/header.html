@@ -23,6 +23,10 @@
                         </li>
                         <li class="nav-item mx-auto p-2">
                         </li>
+                         <li class="nav-item me-5">
+                            <a class="nav-link active" aria-current="page"
+                               href="{% url 'contacts' %}">{% translate 'Contacts' %}</a>
+                        </li>
                         <li class="nav-item me-5">
                             <a class="nav-link active" aria-current="page"
                                href="{% url 'cart' %}">
@@ -35,8 +39,10 @@
                             </a>
                         </li>
                         <li class="me-5 nav-item">
-                            <a class="nav-link text-success"
-                               aria-current="page">{{ request.user.username.capitalize }}</a>
+                            <a class="nav-link text-success" aria-current="page"
+                               href="{% url 'profile' request.user.id %}">
+                                {% firstof request.user.first_name request.user.email %}
+                            </a>
                         </li>
                         <li class="me-5 nav-item">
                             <a class="nav-link active" aria-current="page"

@@ -74,7 +74,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'project.middlewares.TrackingMiddleware',
+    # 'project.middlewares.TrackingMiddleware',
     'django.middleware.locale.LocaleMiddleware',
 ]
 
@@ -130,6 +130,10 @@ LOGIN_REDIRECT_URL = reverse_lazy("main")
 LOGOUT_REDIRECT_URL = LOGIN_REDIRECT_URL
 AUTH_USER_MODEL = 'accounts.User'
 
+AUTHENTICATION_BACKENDS = [
+    "accounts.auth_backends.EmailOrPhoneModelBackend"
+]
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -166,7 +170,6 @@ MEDIA_ROOT = 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = 'django-db'
 
@@ -196,6 +199,24 @@ CACHES = {
         "TIMEOUT": 3600,
     }
 }
+
+# ADMINS = env.list('ADMINS', default='ADMINS')
+ADMINS = (('Admin', 'lobach.igor.olegovich@gmail.com'), )
+# out to console
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = env.str('EMAIL_HOST', default='EMAIL_HOST')
+EMAIL_PORT = env.str('EMAIL_PORT', default='EMAIL_PORT')
+EMAIL_HOST_USER = env.str('EMAIL_HOST_USER', default='EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD',
+                              default='EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS', default=True)
+
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+EMAIL_SUBJECT_PREFIX = 'Shop - '
 
 # tool for error's monitoring
 
