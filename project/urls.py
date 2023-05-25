@@ -22,6 +22,7 @@ from orders.urls import urlpatterns as orders_urlpatterns
 from feedbacks.urls import urlpatterns as feedbacks_urlpatterns
 from accounts.urls import urlpatterns as accounts_urlpatterns
 from main.urls import urlpatterns as main_urlpatterns
+from favourites.urls import urlpatterns as favourites_urlpatterns
 
 
 i18n_urlpatterns = [
@@ -30,6 +31,7 @@ i18n_urlpatterns = [
     path('accounts/', include(accounts_urlpatterns)),
     path('', include(main_urlpatterns)),
     path('', include(orders_urlpatterns)),
+    path('favourites/', include(favourites_urlpatterns)),
 ]
 
 urlpatterns = [

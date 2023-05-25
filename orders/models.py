@@ -13,7 +13,7 @@ from project.model_choices import DiscountTypes
 User = get_user_model()
 
 
-class Discount(PKMixin):
+class Discount(LifecycleModelMixin, PKMixin):
     is_active = models.BooleanField(
         default=True
     )
