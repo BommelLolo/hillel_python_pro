@@ -24,7 +24,8 @@ class CartView(GetCurrentOrderMixin, FormView):
         order = self.get_object()
         context.update({
             'order': order,
-            'order_items': order.order_items.all()
+            # 'order_items': order.order_items.all()
+            'order_items': order.order_items.select_related('product').all()
         })
         return context
 

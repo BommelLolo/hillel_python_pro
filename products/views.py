@@ -9,28 +9,28 @@ from django.utils.decorators import method_decorator
 from django.views.generic import FormView, TemplateView, ListView, DetailView
 from django.urls import reverse_lazy
 
-
 from products.forms import ImportCSVForm
-from products.models import Product
+from products.models import Product, Category
 from project.model_choices import ProductCacheKeys
 
 
 class ProductView(ListView):
     context_object_name = 'products'
     model = Product
+    ordering = '-created_at'
 
     def get_queryset(self):
         queryset = cache.get(ProductCacheKeys.PRODUCTS)
         if not queryset:
-            queryset = Product.objects.all()
+            queryset = Product.objects.prefetch_related(
+                'categories', 'products'
+            ).all()
             cache.set(ProductCacheKeys.PRODUCTS, queryset)
-
         ordering = self.get_ordering()
         if ordering:
             if isinstance(ordering, str):
                 ordering = (ordering,)
             queryset = queryset.order_by(*ordering)
-
         return queryset
 
 
@@ -52,6 +52,7 @@ class ProductDetail(DetailView):
         if slug is not None and (pk is None or self.query_pk_and_slug):
             slug_field = self.get_slug_field()
             queryset = queryset.filter(**{slug_field: slug})
+            queryset = queryset.prefetch_related('products__products')
 
         # If none of those are defined, it's an error.
         if pk is None and slug is None:
@@ -128,3 +129,34 @@ class ImportCSV(FormView):
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
+
+
+class ProductByCategory(ListView):
+    context_object_name = 'products'
+    model = Product
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.category = None
+
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            self.category = Category.objects.get(slug=kwargs['slug'])
+        except Category.DoesNotExist:
+            raise Http404
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(categories=self.category)
+        # qs = qs.filter(categories__in=(self.category,))
+        qs = qs.prefetch_related('products', 'categories')
+        return qs
+        # return qs.filter(categories__in=(self.category,))
+
+
+"""
+        select_related  - FK, OneToOne
+        prefetch_related - ManyToMany
+        :return:
+"""
