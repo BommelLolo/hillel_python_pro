@@ -1,7 +1,13 @@
 from django.contrib import admin
+from django.contrib.admin import TabularInline
 
 from products.models import Product, Category
 from project.mixins.admins import ImageSnapshotAdminMixin
+
+
+class ProductInline(TabularInline):
+    model = Product
+    extra = 1
 
 
 @admin.register(Product)

@@ -1,4 +1,5 @@
 from django.db import models
+from django_lifecycle import LifecycleModelMixin
 
 from project.constants import MAX_DIGITS, DECIMAL_PLACES
 from project.mixins.models import PKMixin
@@ -17,7 +18,7 @@ def get_euro_rate():
     ).latest('created_at').sale
 
 
-class CurrencyHistory(PKMixin):
+class CurrencyHistory(LifecycleModelMixin, PKMixin):
     code = models.CharField(
         choices=Currencies.choices,
         default=Currencies.UAH,

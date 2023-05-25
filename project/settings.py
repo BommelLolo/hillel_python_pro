@@ -65,7 +65,8 @@ INSTALLED_APPS = [
     'accounts',
     'main',
     'tracking',
-    'currencies'
+    'currencies',
+    'favourites',
 ]
 
 if ENABLE_SILK:
