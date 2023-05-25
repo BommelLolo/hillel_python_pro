@@ -23,12 +23,13 @@ from feedbacks.urls import urlpatterns as feedbacks_urlpatterns
 from accounts.urls import urlpatterns as accounts_urlpatterns
 from main.urls import urlpatterns as main_urlpatterns
 
+
 i18n_urlpatterns = [
     path('products/', include(products_urlpatterns)),
-    path('orders/', include(orders_urlpatterns)),
     path('feedbacks/', include(feedbacks_urlpatterns)),
     path('accounts/', include(accounts_urlpatterns)),
-    path('', include(main_urlpatterns))
+    path('', include(main_urlpatterns)),
+    path('', include(orders_urlpatterns)),
 ]
 
 urlpatterns = [
@@ -50,3 +51,5 @@ if 'rosetta' in settings.INSTALLED_APPS:
     urlpatterns += [
         path('rosetta/', include('rosetta.urls'))
     ]
+if settings.ENABLE_SILK:
+    urlpatterns += [path('silk/', include('silk.urls', namespace='silk'))]

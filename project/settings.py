@@ -39,6 +39,7 @@ SECRET_KEY = env.str('SECRET_KEY', default='SECRET_KEY')
 DEBUG = env.bool('DEBUG', default=True)
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
+ENABLE_SILK = env.bool('ENABLE_SILK', default=False)
 
 # Application definition
 
@@ -66,6 +67,9 @@ INSTALLED_APPS = [
     'currencies'
 ]
 
+if ENABLE_SILK:
+    INSTALLED_APPS.append('silk')
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -74,9 +78,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'project.middlewares.TrackingMiddleware',
+    'project.middlewares.TrackingMiddleware',
     'django.middleware.locale.LocaleMiddleware',
 ]
+
+if ENABLE_SILK:
+    MIDDLEWARE.append('silk.middleware.SilkyMiddleware')
 
 ROOT_URLCONF = 'project.urls'
 
@@ -91,6 +98,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'project.context_processors.slug_categories',
+                'project.context_processors.products_in_cart',
             ],
         },
     },
@@ -199,6 +208,8 @@ CACHES = {
         "TIMEOUT": 3600,
     }
 }
+
+APPEND_SLASH = True
 
 # ADMINS = env.list('ADMINS', default='ADMINS')
 ADMINS = (('Admin', 'lobach.igor.olegovich@gmail.com'), )

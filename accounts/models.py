@@ -56,6 +56,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         ),
     )
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
+    # django-phonenumber-field
     phone = models.CharField(max_length=255, blank=True, null=True)
     is_phone_valid = models.BooleanField(default=False)
 

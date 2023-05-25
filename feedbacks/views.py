@@ -6,7 +6,7 @@ from django.utils.decorators import method_decorator
 
 from feedbacks.forms import FeedbackModelForm
 from feedbacks.models import Feedback
-from project.celery import debug_task
+# from project.celery import debug_task
 from project.model_choices import FeedbackCacheKeys
 
 
@@ -29,20 +29,20 @@ class FeedbackList(ListView):
     template_name = 'feedbacks/index.html'
     model = Feedback
 
-    def get(self, request, *args, **kwargs):
-        debug_task.apply_async((2, 6), retry=True, retry_policy={
-            'max_retries': 3,
-            'interval_start': 0,
-            'interval_step': 0.2,
-            'interval_max': 0.2,
-        })
-        return super().get(request, *args, **kwargs)
+    # def get(self, request, *args, **kwargs):
+    #     debug_task.apply_async((2, 6), retry=True, retry_policy={
+    #         'max_retries': 3,
+    #         'interval_start': 0,
+    #         'interval_step': 0.2,
+    #         'interval_max': 0.2,
+    #     })
+    #     return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
         queryset = cache.get(FeedbackCacheKeys.FEEDBACKS)
         if not queryset:
             print('TO CACHE')
-            queryset = Feedback.objects.all()
+            queryset = Feedback.objects.select_related('user').all()
             cache.set(FeedbackCacheKeys.FEEDBACKS, queryset)
 
         ordering = self.get_ordering()

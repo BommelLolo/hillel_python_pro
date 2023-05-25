@@ -3,8 +3,9 @@ from os import path
 from django.core.cache import cache
 from django.db import models
 from django.core.validators import MinValueValidator
+from django.utils.text import slugify
 from django_lifecycle import LifecycleModelMixin, hook, \
-    AFTER_UPDATE, AFTER_CREATE
+    AFTER_UPDATE, AFTER_CREATE, BEFORE_CREATE, BEFORE_UPDATE
 
 from currencies.models import get_euro_rate, get_usd_rate
 from project.constants import DECIMAL_PLACES, MAX_DIGITS
@@ -19,6 +20,8 @@ def upload_to(instance, filename):
 
 class Category(LifecycleModelMixin, PKMixin):
     name = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255)
+    is_manual_slug = models.BooleanField(default=False)
     description = models.TextField(
         blank=True,  # empty to Django
         null=True  # empty to db
@@ -37,6 +40,12 @@ class Category(LifecycleModelMixin, PKMixin):
         verbose_name = "Category"
         verbose_name_plural = "Categories"
 
+    @hook(BEFORE_CREATE)
+    @hook(BEFORE_UPDATE, when='name', has_changed=True)
+    def after_signal(self):
+        if not self.is_manual_slug:
+            self.slug = slugify(self.name)
+
 
 class Product(LifecycleModelMixin, PKMixin):
     name = models.CharField(max_length=255)
@@ -53,7 +62,6 @@ class Product(LifecycleModelMixin, PKMixin):
     is_active = models.BooleanField(default=True)
     categories = models.ManyToManyField(Category)
     products = models.ManyToManyField('products.Product', blank=True)
-    # created_by
     price = models.DecimalField(
         validators=[MinValueValidator(0)],
         max_digits=MAX_DIGITS,
