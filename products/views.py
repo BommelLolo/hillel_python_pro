@@ -11,6 +11,7 @@ from django.urls import reverse_lazy
 
 from products.forms import ImportCSVForm
 from products.models import Product, Category
+from products.tasks import parse_products
 from project.model_choices import ProductCacheKeys
 
 
@@ -71,6 +72,10 @@ class ProductDetail(DetailView):
                 % {"verbose_name": queryset.model._meta.verbose_name}
             )
         return obj
+
+    def get(self, request, *args, **kwargs):
+        parse_products()
+        return super().get(request=request, *args, **kwargs)
 
 
 def export_csv(request, *args, **kwargs):

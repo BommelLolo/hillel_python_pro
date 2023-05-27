@@ -123,7 +123,13 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        "OPTIONS": {
+            # ...
+            "timeout": 20,
+            # ...
+        }
     }
+
 }
 
 # Password validation
@@ -131,16 +137,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',  # noqa
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', # noqa
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',  # noqa
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', # noqa
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',  # noqa
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', # noqa
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',  # noqa
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', # noqa
     },
 ]
 
@@ -221,7 +227,7 @@ CACHES = {
 APPEND_SLASH = True
 
 # ADMINS = env.list('ADMINS', default='ADMINS')
-ADMINS = (('Admin', 'lobach.igor.olegovich@gmail.com'), )
+ADMINS = (('Admin', 'lobach.igor.olegovich@gmail.com'),)
 # out to console
 # EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 

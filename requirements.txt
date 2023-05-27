@@ -16,3 +16,5 @@ django-pymemcache==1.0.0
 django-rosetta==0.9.9
 django-silk==5.0.3
 django-debug-toolbar==4.0.0
+beautifulsoup4==4.12.2
+python-slugify==8.0.1
