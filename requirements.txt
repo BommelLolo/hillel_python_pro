@@ -3,7 +3,7 @@ ipdb==0.13.13
 flake8==6.0.0
 django-environ==0.10.0
 Pillow==9.4.0
-faker==18.3.1
+faker==18.7.0
 django-widget-tweaks==1.4.12
 weasyprint==58.1
 django-lifecycle==1.0.0
@@ -18,3 +18,5 @@ django-silk==5.0.3
 django-debug-toolbar==4.0.0
 beautifulsoup4==4.12.2
 python-slugify==8.0.1
+pytest==7.3.1
+pytest-django==4.5.2
