@@ -1,11 +1,11 @@
-from io import BytesIO
-
-from django.core.exceptions import ValidationError
-from django.core.files.images import ImageFile
-from django.core.validators import URLValidator
+# from io import BytesIO
+#
+# from django.core.exceptions import ValidationError
+# from django.core.files.images import ImageFile
+# from django.core.validators import URLValidator
 
 from products.clients.volleymag import parser_client
-from products.models import Product, Category
+# from products.models import Product, Category
 from project.celery import app
 
 
