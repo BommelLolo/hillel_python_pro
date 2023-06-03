@@ -70,7 +70,8 @@ class Order(LifecycleModelMixin, PKMixin):
 
     def __str__(self):
         return f"Order №{self.order_number} " \
-               f"Amount: {self.total_amount}. User: {User}"
+               f"Amount: {self.total_amount}. " \
+               f"Discount: {self.discount}. User: {User}"
 
     # only one active order for user
     class Meta:
