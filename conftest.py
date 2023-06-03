@@ -33,6 +33,7 @@ class UserFactory(factory.django.DjangoModelFactory):
     last_name = factory.LazyAttribute(lambda x: fake.last_name())
     phone = factory.LazyAttribute(lambda x: fake.phone_number())
     is_phone_valid = True
+    is_staff = False
 
     class Meta:
         model = get_user_model()
@@ -83,6 +84,23 @@ def login_client(db, client):
         assert response.status_code == 302
         return client, user
     return login_user
+
+
+@pytest.fixture(scope='function')
+def login_staff(db, client):
+    def login_staff(user=None, **kwargs):
+        if user is None:
+            user = UserFactory()
+        user.set_password('123456789')
+        user.is_staff = True
+        user.save()
+        response = client.post(reverse('login'),
+                               data={'username': user.email,
+                                     'password': '123456789'}
+                               )
+        assert response.status_code == 302
+        return client, user
+    return login_staff
 
 
 @register

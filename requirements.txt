@@ -22,3 +22,5 @@ pytest==7.3.1
 pytest-django==4.5.2
 pytest-cov==4.1.0
 pytest-factoryboy==2.5.1
+requests~=2.30.0
+pypdf2~=3.0.1
