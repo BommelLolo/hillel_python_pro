@@ -27,7 +27,9 @@ class FeedbackView(CreateView):
 
 class FeedbackList(ListView):
     template_name = 'feedbacks/index.html'
+    context_object_name = 'feedbacks'
     model = Feedback
+    ordering = '-created_at'
 
     # def get(self, request, *args, **kwargs):
     #     debug_task.apply_async((2, 6), retry=True, retry_policy={

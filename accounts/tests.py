@@ -46,7 +46,6 @@ def test_signup(client, faker):
     assert response.status_code == 200
     assert all(v == ['This field is required.']
                for v in response.context['form'].errors.values())
-
     user, _ = User.objects.get_or_create(
         email=faker.email(),
     )
