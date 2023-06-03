@@ -19,8 +19,8 @@ def delete_old_currencies():
 
 @shared_task
 def get_currencies_task():
-    nationbank_client.prepare_data()
     monobank_client.prepare_data()
+    nationbank_client.prepare_data()
     privatbank_client.prepare_data()
 
 

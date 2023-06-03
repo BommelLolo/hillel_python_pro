@@ -34,3 +34,8 @@ def send_email_task(self, text, msg):
         mail_admins(text, msg)
     except TimeoutError as err:
         raise self.retry(exc=err)
+
+# for tests
+# from django.core.mail import mail
+# mail.outbox -> list of letters
+# mail.outbox.attachment / subject.body ...
