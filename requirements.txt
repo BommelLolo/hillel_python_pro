@@ -24,3 +24,5 @@ pytest-cov==4.1.0
 pytest-factoryboy==2.5.1
 requests~=2.30.0
 pypdf2~=3.0.1
+freezegun==1.2.2
+pytest-mock==3.10.0
