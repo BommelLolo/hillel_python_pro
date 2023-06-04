@@ -18,11 +18,25 @@ def test_products_list(client, product_factory, faker):
 
 
 def test_product_detail(client, product_factory, faker):
-    product_factory()
+    product_ex = product_factory()
     url = reverse('products')
-    response = client.get(url)
-
+    response = client.get(url, follow=True)
     assert response.status_code == 200
+    response = client.get(reverse('product', kwargs={'pk': faker.uuid4()}))
+    assert response.status_code == 404
+    assert response.context.get('exception') == \
+           'No product found matching the query'
+    response = client.get(
+        reverse('product', kwargs={'pk': product_ex.id}))
+    assert response.status_code == 200
+    assert product_ex == response.context['products']
+
+
+# def test_product_by_category(client, product_factory, category_factory, faker):
+#     category = category_factory()
+#     breakpoint()
+#     for _ in range((randint(3, 20))):
+#         product_factory(categories=category)
 
 
 def test_export_csv(client, product_factory, faker):
@@ -102,8 +116,7 @@ def test_import_csv(client, login_staff, product_factory, faker):
     data = {
         'file': file_path
     }
-    breakpoint()
-    response = client.post(url, data=data)
+    response = client.post(url, data=data, follow=True)
     assert response.status_code == 200
     url = reverse('products')
     response = client.get(url)
