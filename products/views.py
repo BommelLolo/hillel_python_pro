@@ -19,6 +19,7 @@ class ProductView(ListView):
     context_object_name = 'products'
     model = Product
     ordering = '-created_at'
+    paginate_by = 12
 
     def get_queryset(self):
         queryset = cache.get(ProductCacheKeys.PRODUCTS)
@@ -139,6 +140,7 @@ class ImportCSV(FormView):
 class ProductByCategory(ListView):
     context_object_name = 'products'
     model = Product
+    paginate_by = 8
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
