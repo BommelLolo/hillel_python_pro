@@ -1,0 +1,18 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+</head>
+<body>
+<div>
+    <h2>{% translate "Follow link to finish registration:" %}</h2>
+    <p>
+        <a href="{{ protocol }}://{{ domain }}{% url 'registration_confirm' uidb64=uid token=token %}">
+            Follow link</a>
+    </p>
+    <p>{% translate "Thanks for using our site!" %}</p>
+</div>
+</body>
+</html>
