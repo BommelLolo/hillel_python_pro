@@ -3,6 +3,7 @@ import weasyprint
 
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.cache import cache
+from django.db.models import OuterRef, Exists
 from django.http import HttpResponse, Http404
 from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
@@ -10,6 +11,7 @@ from django.views.generic import FormView, TemplateView, DetailView
 from django.urls import reverse_lazy
 from django_filters.views import FilterView
 
+from favourites.models import FavouriteProduct
 from products.filters import ProductFilter
 from products.forms import ImportCSVForm
 from products.models import Product, Category
@@ -37,6 +39,13 @@ class ProductView(FilterView):
             if isinstance(ordering, str):
                 ordering = (ordering,)
             queryset = queryset.order_by(*ordering)
+        favourite = FavouriteProduct.objects.filter(
+            product=OuterRef('pk'),
+            user=self.request.user
+        )
+        queryset = queryset.annotate(
+            is_favourite=Exists(favourite)
+        )
         return queryset
 
 
