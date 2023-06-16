@@ -13,7 +13,7 @@ class ProductInline(TabularInline):
 @admin.register(Product)
 class ProductAdmin(ImageSnapshotAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'price', 'currency', 'price_uah',
-                    "is_active", 'categories_list')
+                    "is_active", 'categories_list', 'created_at')
     filter_horizontal = ('categories', 'products')  # for parameters ManyToMany
 
     def categories_list(self, obj):
