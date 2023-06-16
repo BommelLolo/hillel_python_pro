@@ -6,20 +6,24 @@ from django.core.cache import cache
 from django.http import HttpResponse, Http404
 from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
-from django.views.generic import FormView, TemplateView, ListView, DetailView
+from django.views.generic import FormView, TemplateView, DetailView
 from django.urls import reverse_lazy
+from django_filters.views import FilterView
 
+from products.filters import ProductFilter
 from products.forms import ImportCSVForm
 from products.models import Product, Category
 from products.tasks import parse_products
 from project.model_choices import ProductCacheKeys
 
 
-class ProductView(ListView):
+class ProductView(FilterView):
+    template_name = 'products/product_list.html'
     context_object_name = 'products'
     model = Product
     ordering = '-created_at'
     paginate_by = 12
+    filterset_class = ProductFilter
 
     def get_queryset(self):
         queryset = cache.get(ProductCacheKeys.PRODUCTS)
@@ -137,10 +141,13 @@ class ImportCSV(FormView):
         return super().form_valid(form)
 
 
-class ProductByCategory(ListView):
+class ProductByCategory(FilterView):
+    template_name = 'products/product_list.html'
     context_object_name = 'products'
     model = Product
     paginate_by = 8
+    ordering = '-created_at'
+    filterset_class = ProductFilter
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
