@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'django_extensions',
     'django_filters',
+    'rest_framework',
     'rosetta',
 
     # internal
