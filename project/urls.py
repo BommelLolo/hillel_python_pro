@@ -17,6 +17,10 @@ from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.conf import settings
 from django.urls import path, include
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework.permissions import IsAuthenticated
+
 from products.urls import urlpatterns as products_urlpatterns
 from orders.urls import urlpatterns as orders_urlpatterns
 from feedbacks.urls import urlpatterns as feedbacks_urlpatterns
@@ -24,7 +28,6 @@ from accounts.urls import urlpatterns as accounts_urlpatterns
 from main.urls import urlpatterns as main_urlpatterns
 from favourites.urls import urlpatterns as favourites_urlpatterns
 from apis.products.urls import urlpatterns as api_products_urlpatterns
-
 
 i18n_urlpatterns = [
     path('products/', include(products_urlpatterns)),
@@ -43,7 +46,30 @@ urlpatterns = [
     path("api/v1/", include(api_urlpatterns))
 ]
 
-urlpatterns = urlpatterns + i18n_patterns(*i18n_urlpatterns)
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Shop API",
+        default_version='v1',
+        description="Test description",
+        # contact=openapi.Contact(email="contact@snippets.local"),
+        # license=openapi.License(name="BSD License"),
+    ),
+    public=False,
+    permission_classes=[IsAuthenticated],
+    # permission_classes=[AllowAny],
+)
+
+urlpatterns_swagger = [
+    path('swagger<format>/', schema_view.without_ui(cache_timeout=0),
+         name='schema-json'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0),
+         name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0),
+         name='schema-redoc'),
+]
+
+urlpatterns = urlpatterns + i18n_patterns(
+    *i18n_urlpatterns) + urlpatterns_swagger
 
 if settings.DEBUG:
     from django.conf.urls.static import static

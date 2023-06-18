@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_filters',
     'rest_framework',
+    'drf_yasg',
     'rosetta',
 
     # internal
@@ -202,11 +203,11 @@ CELERY_RESULT_BACKEND = 'django-db'
 CELERY_BEAT_SCHEDULE = {
     'Get currencies': {
         'task': 'currencies.tasks.get_currencies_task',
-        'schedule': crontab(hour='19', minute='0'),
+        'schedule': crontab(hour='20', minute='37'),
     },
     'Set currencies': {
         'task': 'currencies.tasks.set_currencies_task',
-        'schedule': crontab(hour='19', minute='2'),
+        'schedule': crontab(hour='20', minute='39'),
     }
 }
 
