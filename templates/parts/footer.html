@@ -1,0 +1,32 @@
+{% load static %}
+{% load i18n %}
+<footer>
+    <div class="col-12 position-relative text-center bg-info-subtle">
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">
+                    <a class="nav-link active" aria-current="page"
+                       href="{% url 'products' %}">{% translate 'Products' %}</a>
+                </th>
+                <th scope="col">
+                    <a class="nav-link active" aria-current="page"
+                       href="{% url 'feedbacks' %}">{% translate 'Feedbacks' %}</a>
+                </th>
+                <th scope="col">
+                    {% include 'parts/category_menu.html' %}
+                </th>
+                <th scope="col">
+                    <a class="nav-link active" aria-current="page"
+                       href="{% url 'contacts' %}">{% translate 'Contacts' %}</a>
+                </th>
+                <th scope="col">
+                    <a class="nav-link active" aria-current="page"
+                       href="{% url 'favourites' %}">{% translate 'My favourites' %}</a>
+                </th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+</footer>
